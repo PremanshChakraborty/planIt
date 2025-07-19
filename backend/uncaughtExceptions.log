@@ -1,0 +1,276 @@
+[2025-07-02T06:36:09.822Z] ERROR: uncaughtException: Cannot find module '../routes/trip/trip'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\userRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module '../routes/trip/trip'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\userRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\userRoutes.js:7:20)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-02T06:38:40.140Z] ERROR: uncaughtException: Cannot find module '../routes/trip/tripRoutes'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\userRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module '../routes/trip/tripRoutes'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\userRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\userRoutes.js:7:20)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-02T06:39:25.941Z] ERROR: uncaughtException: Cannot find module 'axios'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\routes\hotel\hotels.js
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module 'axios'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\routes\hotel\hotels.js
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\routes\hotel\hotels.js:2:15)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-02T07:15:54.814Z] ERROR: uncaughtException: Unexpected token ','
+C:\Users\KRISHNA\Travel-App\routes\hotel\locations.js:29
+, {
+^
+
+SyntaxError: Unexpected token ','
+    at wrapSafe (node:internal/modules/cjs/loader:1486:18)
+    at Module._compile (node:internal/modules/cjs/loader:1528:20)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:2:24)
+[2025-07-02T14:34:32.641Z] ERROR: uncaughtException: Cannot find module '../routes/hotel/locations'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module '../routes/hotel/locations'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:1:19)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-02T14:35:10.833Z] ERROR: uncaughtException: Cannot find module '../routes/hotel/locations'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module '../routes/hotel/locations'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:1:19)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-02T14:35:18.465Z] ERROR: uncaughtException: Cannot find module '../routes/hotel/locations'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module '../routes/hotel/locations'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:1:19)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-02T14:36:00.056Z] ERROR: uncaughtException: Cannot find module '../routes/hotel/locations'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module '../routes/hotel/locations'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:1:19)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-11T07:24:42.608Z] ERROR: uncaughtException: invalid_grant
+Error: invalid_grant
+    at Gaxios._request (C:\Users\KRISHNA\Travel-App\node_modules\gaxios\build\src\gaxios.js:142:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async OAuth2Client.refreshTokenNoCache (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:212:19)
+    at async OAuth2Client.refreshAccessTokenAsync (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:247:19)
+    at async OAuth2Client.getAccessTokenAsync (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:276:23)
+[2025-07-11T07:33:17.643Z] ERROR: uncaughtException: invalid_grant
+Error: invalid_grant
+    at Gaxios._request (C:\Users\KRISHNA\Travel-App\node_modules\gaxios\build\src\gaxios.js:142:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async OAuth2Client.refreshTokenNoCache (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:212:19)
+    at async OAuth2Client.refreshAccessTokenAsync (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:247:19)
+    at async OAuth2Client.getAccessTokenAsync (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:276:23)
+[2025-07-11T07:35:22.065Z] ERROR: uncaughtException: A is not defined
+ReferenceError: A is not defined
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\utils\send_email.js:5:35)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\routes\user\send_otp.js:5:19)
+[2025-07-11T07:35:28.189Z] ERROR: uncaughtException: invalid_grant
+Error: invalid_grant
+    at Gaxios._request (C:\Users\KRISHNA\Travel-App\node_modules\gaxios\build\src\gaxios.js:142:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async OAuth2Client.refreshTokenNoCache (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:212:19)
+    at async OAuth2Client.refreshAccessTokenAsync (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:247:19)
+    at async OAuth2Client.getAccessTokenAsync (C:\Users\KRISHNA\Travel-App\node_modules\google-auth-library\build\src\auth\oauth2client.js:276:23)
+[2025-07-11T07:54:04.755Z] ERROR: uncaughtException: Cannot find module '../routes/hotel/searchByCity'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module '../routes/hotel/searchByCity'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:1:22)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-11T07:54:10.765Z] ERROR: uncaughtException: Cannot find module '../routes/hotel/searchByCity'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+Error: Cannot find module '../routes/hotel/searchByCity'
+Require stack:
+- C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js
+- C:\Users\KRISHNA\Travel-App\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:1:22)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+[2025-07-11T07:54:26.006Z] ERROR: uncaughtException: searchByGeoId is not defined
+ReferenceError: searchByGeoId is not defined
+    at module.exports (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:4:26)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\index.js:17:33)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+[2025-07-11T07:55:30.871Z] ERROR: uncaughtException: searchByGeoId is not defined
+ReferenceError: searchByGeoId is not defined
+    at module.exports (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:4:26)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\index.js:17:33)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+[2025-07-11T07:55:54.058Z] ERROR: uncaughtException: searchByGeoId is not defined
+ReferenceError: searchByGeoId is not defined
+    at module.exports (C:\Users\KRISHNA\Travel-App\startup\hotelRoutes.js:4:26)
+    at Object.<anonymous> (C:\Users\KRISHNA\Travel-App\index.js:17:33)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49
+[2025-07-16T05:03:15.998Z] ERROR: uncaughtException: nodemailer is not defined
+ReferenceError: nodemailer is not defined
+    at Object.<anonymous> (C:\Users\preet\node\Travel-App-premansh\utils\send_email.js:19:19)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.require (node:internal/modules/cjs/loader:1487:12)
+    at require (node:internal/modules/helpers:135:16)
+    at Object.<anonymous> (C:\Users\preet\node\Travel-App-premansh\routes\user\send_otp.js:5:19)
+[2025-07-16T05:03:47.459Z] ERROR: uncaughtException: nodemailer is not defined
+ReferenceError: nodemailer is not defined
+    at Object.<anonymous> (C:\Users\preet\node\Travel-App-premansh\utils\send_email.js:19:19)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.require (node:internal/modules/cjs/loader:1487:12)
+    at require (node:internal/modules/helpers:135:16)
+    at Object.<anonymous> (C:\Users\preet\node\Travel-App-premansh\routes\user\send_otp.js:5:19)
+[2025-07-18T09:20:49.987Z] ERROR: uncaughtException: querySrv ECONNREFUSED _mongodb._tcp.cluster0.ru7rx.mongodb.net
+Error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.ru7rx.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
