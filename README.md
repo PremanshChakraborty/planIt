@@ -1,112 +1,120 @@
-# PlanIt
+# PlanIt 🚀🌍
 
-Your Ultimate Trip Planning Companion
-
----
-
-## Project Overview
-
-**PlanIt** is a personal trip planning companion app that empowers users to build, organize, and manage their future adventures. Designed for both solo and group travelers, PlanIt streamlines itinerary creation, hotel and attraction discovery, and integrates essential safety features to keep you secure throughout your journey.
-
----
-
-## App Features
-
-- **Trip Management**: Create, edit, and organize trips with detailed itineraries, dates, and destinations.
-- **Hotel Search & Booking**: Find and book hotels tailored to your trip needs, powered by real-time data.
-- **Attraction Discovery**: Explore and save nearby attractions for each trip location.
-- **My Trips Dashboard**: View, manage, and revisit all your upcoming and past trips in one place.
-- **Safety & Emergency Tools**:
-  - **SOS Button**: Instantly send your location to emergency contacts and call local authorities.
-  - **Emergency Contacts**: Add, manage, and quickly reach your trusted contacts.
-  - **Safety Settings**: Centralized hub for all safety-related features.
-- **User Profile**: Manage your personal information and preferences securely.
-- **Modern, Intuitive UI**: Enjoy a clean, visually appealing interface with smooth navigation and interactive elements.
-
-> 📸 **For a detailed look at each feature, see the screenshots below.**
+[![Flutter](https://img.shields.io/badge/Flutter-3.0-blue?logo=flutter)](https://flutter.dev)
+[![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js)](https://nodejs.org)
+[![Express](https://img.shields.io/badge/Express.js-4.x-black?logo=express)](https://expressjs.com)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.x-brightgreen?logo=mongodb)](https://mongodb.com)
+[![Docker](https://img.shields.io/badge/Docker-🟦-blue?logo=docker)](https://www.docker.com/)
+[![Fly.io](https://img.shields.io/badge/Deployed%20on-Fly.io-blueviolet?logo=flydotio)](https://fly.io)
+[![Android](https://img.shields.io/badge/Platform-Android-green?logo=android)](https://android.com)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-## Screenshots
+## 🗺️ Overview
 
-### Trip Flow
-![Trip Flow 1](screenshots/tripflow1.jpg)
-![Trip Flow 2](screenshots/tripflow2.jpg)
-![Trip Flow 3](screenshots/tripflow3.jpg)
-![Trip Flow 4](screenshots/tripflow4.jpg)
-
-### Hotels & Attractions
-![Hotels and Attractions 1](screenshots/hotelsandattractions1.jpg)
-![Hotels and Attractions 2](screenshots/hotelsandattractions2.jpg)
-![Hotels and Attractions 3](screenshots/hotelsandattractions3.jpg)
-
-### Maps
-![Maps 1](screenshots/maps1.jpg)
-![Maps 2](screenshots/maps2.jpg)
-
-### Profile & Safety
-![Profile and Safety 1](screenshots/profileandsafety1.jpg)
-![Profile and Safety 2](screenshots/profileandsafety2.jpg)
+**PlanIt** is your all-in-one trip planning companion app. Effortlessly build, organize, and manage your adventures, discover hotels and attractions, and stay safe with built-in emergency features. Designed for solo explorers and group travelers alike!
 
 ---
 
-## Tech Stack
+## 📥 Download
 
-**Frontend:**
-- **Flutter** (Dart)
-  - State management: `provider`
-  - UI: Material Design, custom widgets, `carousel_slider`
-  - Maps: `google_maps_flutter`, `google_place`
-  - Device features: `geolocator`, `telephony`, `flutter_phone_direct_caller`, `permission_handler`, `shared_preferences`
-  - HTTP: `http`
-  - Other: `intl`, `json_serializable`, `dotted_line`, `url_launcher`
+<p align="center">
+  <a href="https://limewire.com/d/UElzq#5q0PLAEtNJ" target="_blank">
+    <img src="https://img.shields.io/badge/Download%20APK-PlanIt-blueviolet?logo=android&logoColor=white&style=for-the-badge" alt="Download PlanIt APK"/>
+  </a>
+</p>
 
-**Backend:**
-- **Node.js** (Express)
-  - Database: MongoDB (via `mongoose`)
-  - Auth: JWT (`jsonwebtoken`)
-  - Validation: `joi`, `joi-phone-number`, `validator`
-  - Email: `nodemailer`, `googleapis` (OAuth2 for Gmail)
-  - Config: `config`, `dotenv`
-  - Logging: `winston`
-  - HTTP requests: `axios`
-
-**Deployment:**
-- Docker, Fly.io
+> ⚠️ **Note:** To install PlanIt, you must temporarily disable Google Play Protect. Some advanced safety features require high-level permissions that may trigger Play Protect warnings. Only install if you trust the source.
 
 ---
 
-## API Mentions
+## 🛠️ Tech Stack
 
-- **Google Places API**: Place search, autocomplete, and details (attractions, maps, etc.)
-- **Google Maps API**: Map display and geolocation
-- **Tripadvisor RapidAPI**: Hotel search and booking data
-- **Device Telephony/SMS**: Emergency SMS and direct calling (via device permissions and plugins)
-- **Gmail SMTP (OAuth2)**: Sending emails (password resets, notifications)
+[![Flutter](https://img.shields.io/badge/Flutter-3.0-blue?logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.0-blue?logo=dart)](https://dart.dev)
+[![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js)](https://nodejs.org)
+[![Express](https://img.shields.io/badge/Express.js-4.x-black?logo=express)](https://expressjs.com)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.x-brightgreen?logo=mongodb)](https://mongodb.com)
+[![Docker](https://img.shields.io/badge/Docker-🟦-blue?logo=docker)](https://www.docker.com/)
+[![Fly.io](https://img.shields.io/badge/Deployed%20on-Fly.io-blueviolet?logo=flydotio)](https://fly.io)
+[![Android](https://img.shields.io/badge/Platform-Android-green?logo=android)](https://android.com)
 
----
-
-## Download
-
-[Download PlanIt APK](https://limewire.com/d/UElzq#5q0PLAEtNJ)
-
-> **Note:** To install PlanIt, you must temporarily disable Google Play Protect. Some of the app's advanced safety features require high-level permissions that may trigger Play Protect warnings. Please ensure you trust the source before proceeding.
-
----
-
-## Future Plans
-
-- **Group Collaborations**: Plan trips together with friends and family, share itineraries, and coordinate activities.
-- **Transport Suggestions & Bookings**: Get recommendations and booking options for flights, trains, and other transport modes.
+- **Frontend:** Flutter (Dart), Provider, Google Maps, Device APIs, Material UI
+- **Backend:** Node.js (Express), MongoDB, JWT Auth, Joi Validation, Nodemailer, Winston
+- **Deployment:** Docker, Fly.io
 
 ---
 
-## Contact & Feedback
+## ✨ Features
 
-Have suggestions, feedback, or need support? Please open an issue or reach out via the repository.
+- 🗂️ **Trip Management:** Create, edit, and organize trips with detailed itineraries.
+- 🏨 **Hotel Search & Booking:** Find and book hotels with real-time data.
+- 🗺️ **Attraction Discovery:** Explore and save nearby attractions for each trip location.
+- 📅 **My Trips Dashboard:** View, manage, and revisit all your trips in one place.
+- 🆘 **Safety & Emergency Tools:**
+  - 🚨 **SOS Button:** Instantly send your location to emergency contacts and call local authorities.
+  - 📇 **Emergency Contacts:** Add, manage, and quickly reach your trusted contacts.
+  - 🛡️ **Safety Settings:** Centralized hub for all safety features.
+- 👤 **User Profile:** Manage your personal info and preferences securely.
+- 🎨 **Modern UI:** Clean, visually appealing interface with smooth navigation.
+
+> 📸 **See screenshots below for a visual tour of each feature!**
 
 ---
 
-## License
+## 🌐 API Mentions
 
-This project is for personal use. For licensing or usage inquiries, please contact the maintainer. 
+- [Google Places API](https://developers.google.com/maps/documentation/places/web-service/overview): Place search, autocomplete, and details
+- [Google Maps API](https://developers.google.com/maps/documentation/maps-static/overview): Map display and geolocation
+- [Tripadvisor RapidAPI](https://rapidapi.com/apidojo/api/tripadvisor-com): Hotel search and booking data
+- Device Telephony/SMS: Emergency SMS and direct calling (via device permissions and plugins)
+- Gmail SMTP (OAuth2): Sending emails (password resets, notifications)
+
+---
+
+## 🖼️ Screenshots
+
+### 🧭 Trip Planning Flow
+<table><tr>
+<td><img src="screenshots/tripflow1.jpg" width="220"/></td>
+<td><img src="screenshots/tripflow2.jpg" width="220"/></td>
+<td><img src="screenshots/tripflow3.jpg" width="220"/></td>
+<td><img src="screenshots/tripflow4.jpg" width="220"/></td>
+</tr></table>
+
+### 🏨 Hotel & Attraction Discovery
+<table><tr>
+<td><img src="screenshots/hotelsandattractions1.jpg" width="220"/></td>
+<td><img src="screenshots/hotelsandattractions2.jpg" width="220"/></td>
+<td><img src="screenshots/hotelsandattractions3.jpg" width="220"/></td>
+</tr></table>
+
+### 🗺️ Interactive Maps
+<table><tr>
+<td><img src="screenshots/maps1.jpg" width="220"/></td>
+<td><img src="screenshots/maps2.jpg" width="220"/></td>
+</tr></table>
+
+### 🛡️ Profile & Safety
+<table><tr>
+<td><img src="screenshots/profileandsafety1.jpg" width="220"/></td>
+<td><img src="screenshots/profileandsafety2.jpg" width="220"/></td>
+</tr></table>
+
+---
+
+## 🚧 Future Plans
+
+- 🤝 **Group Collaborations:** Plan trips together, share itineraries, and coordinate activities.
+- ✈️ **Transport Suggestions & Bookings:** Get recommendations and booking options for flights, trains, and more.
+
+---
+
+## 📞 Contact
+
+- 📱 **Phone:** +91 8260094077
+- 📧 **Email:** premansh_ug_23@cse.nits.ac.in
+- 💻 **GitHub:** [premansh29](https://github.com/premansh29)
+
+Feel free to reach out for feedback, suggestions, or support! 
