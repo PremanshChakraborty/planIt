@@ -1,4 +1,4 @@
-# PlanIt 🚀🌍
+# PlanIt 🌍
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.0-blue?logo=flutter)](https://flutter.dev)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js)](https://nodejs.org)
@@ -25,7 +25,7 @@
   </a>
 </p>
 
-> ⚠️ **Note:** To install PlanIt, you must temporarily disable Google Play Protect. Some advanced safety features require high-level permissions that may trigger Play Protect warnings. Only install if you trust the source.
+> ⚠️ **Note:** To install PlanIt, you must temporarily disable Google Play Protect. Some advanced safety features require high-level permissions that may trigger Play Protect warnings.
 
 ---
 
@@ -115,6 +115,6 @@
 
 - 📱 **Phone:** +91 8260094077
 - 📧 **Email:** premansh_ug_23@cse.nits.ac.in
-- 💻 **GitHub:** [premansh29](https://github.com/premansh29)
+- 💻 **GitHub:** [premansh29](https://github.com/PremanshChakraborty)
 
 Feel free to reach out for feedback, suggestions, or support! 
