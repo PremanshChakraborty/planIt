@@ -1,4 +1,6 @@
-# PlanIt 🌍
+<p align="center">
+  <img src="frontend/assets/images/planit-high-resolution-logo-transparent.png" alt="PlanIt Logo" width="320"/>
+</p>
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.0-blue?logo=flutter)](https://flutter.dev)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js)](https://nodejs.org)
@@ -8,6 +10,19 @@
 [![Fly.io](https://img.shields.io/badge/Deployed%20on-Fly.io-blueviolet?logo=flydotio)](https://fly.io)
 [![Android](https://img.shields.io/badge/Platform-Android-green?logo=android)](https://android.com)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
+
+## 📑 Contents
+
+- [Overview](#️-overview)
+- [Download](#-download)
+- [Tech Stack](#️-tech-stack)
+- [Features](#-features)
+- [API Mentions](#-api-mentions)
+- [Screenshots](#️-screenshots)
+- [Future Plans](#-future-plans)
+- [Contact](#-contact)
 
 ---
 
