@@ -5,6 +5,7 @@ import '../emergency_page/emergency_page.dart';
 import '../../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import '../../main.dart';
+import '../../services/upload_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -17,12 +18,12 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isEditing = false;
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
-  
+  final UploadService _uploadService = UploadService();
   // Controllers for editing fields
   late TextEditingController nameController;
   late TextEditingController emailController;
   late TextEditingController phoneController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       phoneController = TextEditingController();
     }
   }
-  
+
   @override
   void dispose() {
     nameController.dispose();
@@ -45,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
     phoneController.dispose();
     super.dispose();
   }
-  
+
   // Handle error display with snackbar
   void _handleErrorDisplay(BuildContext context, Auth authProvider) {
     // Only show error if there's an unshown error
@@ -60,40 +61,42 @@ class _ProfilePageState extends State<ProfilePage> {
               duration: Duration(seconds: 3),
             ),
           );
-        
+
         // Mark error as shown
         authProvider.markErrorAsShown();
       });
     }
   }
-  
+
   void toggleEditMode() async {
     final authProvider = Provider.of<Auth>(context, listen: false);
-    
+
     if (isEditing) {
       // Validate form before saving
       if (!_formKey.currentState!.validate()) {
         return;
       }
-      
+
       // Save changes
       setState(() {
         isLoading = true;
       });
-      
+
       final currentUser = authProvider.user;
       if (currentUser != null) {
         final updatedUser = User(
           id: currentUser.id,
           name: nameController.text.trim(),
           email: emailController.text.trim(),
-          phone: phoneController.text.trim().isEmpty ? null : phoneController.text.trim(),
+          phone: phoneController.text.trim().isEmpty
+              ? null
+              : phoneController.text.trim(),
           imageUrl: currentUser.imageUrl,
           emergencyContacts: currentUser.emergencyContacts,
         );
-        
+
         final success = await authProvider.editProfile(updatedUser);
-        
+
         setState(() {
           isLoading = false;
           if (success) {
@@ -123,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
-  
+
   void cancelEdit() {
     final user = Provider.of<Auth>(context, listen: false).user;
     setState(() {
@@ -135,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
       isEditing = false;
     });
   }
-  
+
   void handleLogout() {
     final authProvider = Provider.of<Auth>(context, listen: false);
     authProvider.logout();
@@ -148,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
     return emailRegExp.hasMatch(email);
   }
-  
+
   // Phone validation (optional field)
   bool isValidPhone(String phone) {
     if (phone.isEmpty) return true; // Phone is optional
@@ -159,11 +162,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildAvatar() {
     final user = Provider.of<Auth>(context).user;
     if (user == null) return CircleAvatar(radius: 50);
-    
+
     if (user.imageUrl != null) {
       return CircleAvatar(
         radius: 50,
-        backgroundImage: AssetImage(user.imageUrl!),
+        backgroundImage: NetworkImage(user.imageUrl!),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       );
     } else {
       return CircleAvatar(
@@ -185,10 +189,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<Auth>(context);
     final user = authProvider.user;
-    
+
     // Handle error display
     _handleErrorDisplay(context, authProvider);
-    
+
     if (user == null) {
       // Handle case where user is not logged in
       return Scaffold(
@@ -197,33 +201,37 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     }
-    
+
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('${isEditing ? 'Edit' : 'My'} Profile',
-         style: Theme.of(context).textTheme.titleLarge),
+            style: Theme.of(context).textTheme.titleLarge),
         elevation: 0,
-        leading: isEditing ? IconButton(
-          icon: Icon(Icons.close),
-          onPressed: cancelEdit,
-        ) : null,
+        leading: isEditing
+            ? IconButton(
+                icon: Icon(Icons.close),
+                onPressed: cancelEdit,
+              )
+            : null,
         actions: [
           if (isEditing)
             Padding(
               padding: const EdgeInsets.only(right: 14.0),
-              child: isLoading 
-                ? CircularProgressIndicator(color: Colors.white)
-                : ElevatedButton.icon(
-                  icon: Icon(Icons.save, color: Colors.white),
-                  label: Text('Save', style: TextStyle(color: Colors.white, fontSize: 16)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+              child: isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : ElevatedButton.icon(
+                      icon: Icon(Icons.save, color: Colors.white),
+                      label: Text('Save',
+                          style: TextStyle(color: Colors.white, fontSize: 16)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onPressed: toggleEditMode,
                     ),
-                  ),
-                  onPressed: toggleEditMode,
-                ),
             )
           else
             Padding(
@@ -241,7 +249,6 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
               SizedBox(height: 20),
               Center(
                 child: Column(
@@ -254,10 +261,49 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: 110,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color.fromARGB(255, 255, 98, 0).withOpacity(0.4),
+                            color: const Color.fromARGB(255, 255, 98, 0)
+                                .withOpacity(0.4),
                           ),
                         ),
                         _buildAvatar(),
+                        if (isEditing)
+                          Positioned(
+                            top: 1,
+                            right: 1,
+                            child: InkWell(
+                              onTap: () {
+                                _uploadService.updateProfilePhoto(
+                                    authProvider.token!, context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .surface
+                                      .withOpacity(0.5),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withOpacity(0.7),
+                                    width: 2,
+                                  ),
+                                ),
+                                padding: EdgeInsets.all(2),
+                                child: Icon(
+                                  user.imageUrl != null
+                                      ? Icons.edit
+                                      : Icons.add,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.8),
+                                  size: 24,
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                     SizedBox(height: isEditing ? 30 : 20),
@@ -277,30 +323,36 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Icon(Icons.security, color: Theme.of(context).colorScheme.primary),
+                        leading: Icon(Icons.security,
+                            color: Theme.of(context).colorScheme.primary),
                         title: Text("Safety Settings"),
                         trailing: Icon(Icons.arrow_forward_ios, size: 16),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => EmergencyContactPage()),
+                            MaterialPageRoute(
+                                builder: (context) => EmergencyContactPage()),
                           );
                         },
                       ),
                       Divider(),
                       SwitchListTile(
-                        secondary: Icon(Icons.dark_mode_outlined, color: Theme.of(context).colorScheme.primary),
+                        secondary: Icon(Icons.dark_mode_outlined,
+                            color: Theme.of(context).colorScheme.primary),
                         title: Text("Dark Mode"),
-                        value: Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark,
+                        value: Provider.of<ThemeProvider>(context).themeMode ==
+                            ThemeMode.dark,
                         onChanged: (value) {
-                          Provider.of<ThemeProvider>(context, listen: false).setDarkMode(value);
+                          Provider.of<ThemeProvider>(context, listen: false)
+                              .setDarkMode(value);
                           print('ok');
                         },
                       ),
                       Divider(),
                       ListTile(
                         leading: Icon(Icons.logout, color: Colors.red),
-                        title: Text("Logout", style: TextStyle(color: Colors.red)),
+                        title:
+                            Text("Logout", style: TextStyle(color: Colors.red)),
                         onTap: handleLogout,
                       ),
                     ],
@@ -314,7 +366,7 @@ class _ProfilePageState extends State<ProfilePage> {
       bottomNavigationBar: BottomNav(currentindex: 4),
     );
   }
-  
+
   Widget _buildPersonalInfoSection() {
     if (isEditing) {
       return Padding(
@@ -373,9 +425,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 keyboardType: TextInputType.phone,
-                
                 validator: (value) {
-                  if (value != null && value.trim().isNotEmpty && !isValidPhone(value.trim())) {
+                  if (value != null &&
+                      value.trim().isNotEmpty &&
+                      !isValidPhone(value.trim())) {
                     return 'Please enter a valid phone number';
                   }
                   return null;
@@ -388,15 +441,15 @@ class _ProfilePageState extends State<ProfilePage> {
     } else {
       final user = Provider.of<Auth>(context).user;
       if (user == null) return SizedBox.shrink();
-      
+
       return Column(
         children: [
           Text(
             user.name,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           SizedBox(height: 4),
           Text(

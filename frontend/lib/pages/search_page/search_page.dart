@@ -15,6 +15,8 @@ class _SearchPageState extends State<SearchPage> {
   final String apiKey = Constants.googlePlacesApiKey;
   late final TextEditingController _textController;
 
+  int _selectedDays = 1;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +37,61 @@ class _SearchPageState extends State<SearchPage> {
           'Search Places',
           style: Theme.of(context).textTheme.titleMedium,
         ),
+        actions: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            margin: const EdgeInsets.only(right: 16),
+            child: PopupMenuButton<int>(
+              initialValue: _selectedDays,
+              onSelected: (int value) {
+                setState(() {
+                  _selectedDays = value;
+                });
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_today,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '$_selectedDays Day${_selectedDays > 1 ? 's' : ''}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+              ),
+              itemBuilder: (BuildContext context) {
+                return List.generate(10, (index) {
+                  final days = index + 1;
+                  return PopupMenuItem<int>(
+                    value: days,
+                    child: Text('$days Day${days > 1 ? 's' : ''}'),
+                  );
+                });
+              },
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -49,7 +106,8 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
               debounceTime: 400,
               countries: const ["in"], // Add your country codes here
@@ -61,7 +119,7 @@ class _SearchPageState extends State<SearchPage> {
                   PlaceModel(
                     placeId: prediction.placeId ?? '',
                     placeName: prediction.description ?? '',
-                    day: 1,
+                    day: _selectedDays,
                     latitude: double.tryParse(prediction.lat ?? ''),
                     longitude: double.tryParse(prediction.lng ?? ''),
                   ),

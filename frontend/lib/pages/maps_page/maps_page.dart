@@ -28,10 +28,11 @@ class _MapsPageState extends State<MapsPage> {
   List<AutocompletePrediction> _predictions = [];
   final FocusNode _searchFocus = FocusNode();
   bool _isSearchOpen = false;
-  List<SearchResult>? _nearbyResults; // Store nearby search results for the list
+  List<SearchResult>?
+      _nearbyResults; // Store nearby search results for the list
   // Add a controller for the DraggableScrollableSheet
-  final DraggableScrollableController _sheetController = DraggableScrollableController();
-
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
 
   // Default position for Delhi, India if location is unavailable
   final LatLng _defaultPosition = LatLng(28.6139, 77.2090);
@@ -69,7 +70,9 @@ class _MapsPageState extends State<MapsPage> {
 
   Future<void> _selectPrediction(AutocompletePrediction prediction) async {
     final details = await googlePlace.details.get(prediction.placeId!);
-    if (details != null && details.result != null && details.result!.geometry?.location != null) {
+    if (details != null &&
+        details.result != null &&
+        details.result!.geometry?.location != null) {
       final loc = details.result!.geometry!.location!;
       final LatLng position = LatLng(loc.lat!, loc.lng!);
 
@@ -88,7 +91,6 @@ class _MapsPageState extends State<MapsPage> {
     }
   }
 
-
   // Safe setState that checks if the widget is still mounted
   void _safeSetState(VoidCallback fn) {
     if (mounted && !_disposed) {
@@ -97,7 +99,8 @@ class _MapsPageState extends State<MapsPage> {
   }
 
   // Centralized function to set current location
-  void _setCurrentLocation(LatLng newLocation, {bool moveCamera = true, bool clearNearby = false}) {
+  void _setCurrentLocation(LatLng newLocation,
+      {bool moveCamera = true, bool clearNearby = false}) {
     _safeSetState(() {
       _currentLocation = newLocation;
       if (clearNearby) {
@@ -107,12 +110,13 @@ class _MapsPageState extends State<MapsPage> {
       }
     });
     if (_sheetController.isAttached) {
-      _sheetController.animateTo(0.18, duration: Duration(milliseconds: 350), curve: Curves.easeInOut);
+      _sheetController.animateTo(0.18,
+          duration: Duration(milliseconds: 350), curve: Curves.easeInOut);
     }
     Future.delayed(Duration(milliseconds: 350), () {
-        _safeSetState(() {
-          _nearbyResults = null;
-        }); 
+      _safeSetState(() {
+        _nearbyResults = null;
+      });
     });
     if (moveCamera && mapController != null) {
       mapController!.animateCamera(CameraUpdate.newLatLng(newLocation));
@@ -136,8 +140,8 @@ class _MapsPageState extends State<MapsPage> {
       try {
         Position position = await Geolocator.getCurrentPosition()
             .timeout(const Duration(seconds: 15), onTimeout: () {
-              throw TimeoutException();
-            });
+          throw TimeoutException();
+        });
         final LatLng userLatLng = LatLng(position.latitude, position.longitude);
         _safeSetState(() {
           _userLocation = userLatLng;
@@ -190,7 +194,8 @@ class _MapsPageState extends State<MapsPage> {
     });
     try {
       var result = await googlePlace.search.getNearBySearch(
-        Location(lat: _currentLocation!.latitude, lng: _currentLocation!.longitude),
+        Location(
+            lat: _currentLocation!.latitude, lng: _currentLocation!.longitude),
         5000,
         type: placeType,
       );
@@ -198,7 +203,8 @@ class _MapsPageState extends State<MapsPage> {
       if (result == null || result.results == null || result.results!.isEmpty) {
         // Shrink the sheet if no results
         if (_sheetController.isAttached) {
-          _sheetController.animateTo(0.18, duration: Duration(milliseconds: 350), curve: Curves.easeInOut);
+          _sheetController.animateTo(0.18,
+              duration: Duration(milliseconds: 350), curve: Curves.easeInOut);
         }
         return;
       }
@@ -225,16 +231,17 @@ class _MapsPageState extends State<MapsPage> {
       });
       // Expand the sheet to max height when data is loaded
       if (_sheetController.isAttached) {
-        _sheetController.animateTo(0.85, duration: Duration(milliseconds: 350), curve: Curves.easeInOut);
+        _sheetController.animateTo(0.85,
+            duration: Duration(milliseconds: 350), curve: Curves.easeInOut);
       } else {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (_sheetController.isAttached) {
-            _sheetController.animateTo(0.85, duration: Duration(milliseconds: 350), curve: Curves.easeInOut);
+            _sheetController.animateTo(0.85,
+                duration: Duration(milliseconds: 350), curve: Curves.easeInOut);
           }
         });
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   String _getPlaceType(String category) {
@@ -260,6 +267,7 @@ class _MapsPageState extends State<MapsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Maps', style: Theme.of(context).textTheme.titleLarge),
       ),
       body: Stack(
@@ -287,7 +295,8 @@ class _MapsPageState extends State<MapsPage> {
             child: FloatingActionButton(
               onPressed: () {
                 if (_userLocation != null) {
-                  _setCurrentLocation(_userLocation!, moveCamera: true, clearNearby: true);
+                  _setCurrentLocation(_userLocation!,
+                      moveCamera: true, clearNearby: true);
                 }
               },
               backgroundColor: Theme.of(context).colorScheme.primary,
@@ -300,7 +309,8 @@ class _MapsPageState extends State<MapsPage> {
             left: 12,
             child: AnimatedContainer(
               duration: Duration(milliseconds: 300),
-              width: _isSearchOpen ? MediaQuery.of(context).size.width - 84 : 50,
+              width:
+                  _isSearchOpen ? MediaQuery.of(context).size.width - 84 : 50,
               height: 50,
               curve: Curves.easeInOut,
               decoration: BoxDecoration(
@@ -317,7 +327,8 @@ class _MapsPageState extends State<MapsPage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(_isSearchOpen ? Icons.arrow_back : Icons.search,color:  Theme.of(context).colorScheme.onSurface),
+                    icon: Icon(_isSearchOpen ? Icons.arrow_back : Icons.search,
+                        color: Theme.of(context).colorScheme.onSurface),
                     onPressed: () {
                       setState(() {
                         if (_isSearchOpen) {
@@ -385,7 +396,7 @@ class _MapsPageState extends State<MapsPage> {
             builder: (context, scrollController) {
               return Container(
                 decoration: BoxDecoration(
-                  color:  Theme.of(context).colorScheme.surface,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                   boxShadow: [
                     BoxShadow(
@@ -412,27 +423,40 @@ class _MapsPageState extends State<MapsPage> {
                     ),
                     // Search Nearby header (always visible)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
-                      child: Text('Search Nearby', style: Theme.of(context).textTheme.bodyLarge),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 4),
+                      child: Text('Search Nearby',
+                          style: Theme.of(context).textTheme.bodyLarge),
                     ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: ['Restaurants', 'Hotels', 'Malls', 'Parks', 'Banks', 'Markets']
-                            .map((category) {
+                        children: [
+                          'Restaurants',
+                          'Hotels',
+                          'Malls',
+                          'Parks',
+                          'Banks',
+                          'Markets'
+                        ].map((category) {
                           bool isSelected = _selectedCategory == category;
                           return Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: ElevatedButton(
                               onPressed: () => searchNearby(category),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: isSelected ? Theme.of(context).colorScheme.secondaryContainer :  Theme.of(context).colorScheme.surface,
-                                foregroundColor: Theme.of(context).colorScheme.onSurface,
+                                backgroundColor: isSelected
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer
+                                    : Theme.of(context).colorScheme.surface,
+                                foregroundColor:
+                                    Theme.of(context).colorScheme.onSurface,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  side: BorderSide(color: Colors.grey.withOpacity(0.2))
-                                ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        color: Colors.grey.withOpacity(0.2))),
                               ),
                               child: Text(category),
                             ),
@@ -445,15 +469,22 @@ class _MapsPageState extends State<MapsPage> {
                       child: _nearbyResults == null
                           ? SizedBox.shrink() // No space when no data
                           : _nearbyResults!.isEmpty
-                              ? Center(child: Text('No places found.', style: Theme.of(context).textTheme.bodyMedium))
+                              ? Center(
+                                  child: Text('No places found.',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium))
                               : ListView.separated(
                                   controller: scrollController,
                                   padding: EdgeInsets.only(top: 12, bottom: 16),
                                   itemCount: _nearbyResults!.length,
-                                  separatorBuilder: (_, __) => Container(height: 18,color:  Colors.grey.withOpacity(0.1)),
+                                  separatorBuilder: (_, __) => Container(
+                                      height: 18,
+                                      color: Colors.grey.withOpacity(0.1)),
                                   itemBuilder: (context, index) {
                                     final place = _nearbyResults![index];
-                                    final imageUrl = place.photos != null && place.photos!.isNotEmpty
+                                    final imageUrl = place.photos != null &&
+                                            place.photos!.isNotEmpty
                                         ? 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos!.first.photoReference}&key=$apiKey'
                                         : 'https://via.placeholder.com/400x200?text=No+Image';
                                     return _NearbyAttractionTile(
@@ -538,7 +569,7 @@ class _NearbyAttractionTile extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          place.types?.isNotEmpty == true 
+                          place.types?.isNotEmpty == true
                               ? _formatTypes(place.types!)
                               : 'Tourist Attraction',
                           style: theme.textTheme.bodySmall?.copyWith(
@@ -571,7 +602,8 @@ class _NearbyAttractionTile extends StatelessWidget {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.star, color: Colors.amber, size: 16),
+                            const Icon(Icons.star,
+                                color: Colors.amber, size: 16),
                             Text(
                               ' ${place.rating}',
                               style: theme.textTheme.bodySmall?.copyWith(
@@ -583,7 +615,8 @@ class _NearbyAttractionTile extends StatelessWidget {
                       if (place.openingHours?.openNow != null)
                         Container(
                           margin: const EdgeInsets.only(top: 4),
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: place.openingHours!.openNow!
                                 ? Colors.green.shade50
@@ -591,7 +624,9 @@ class _NearbyAttractionTile extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            place.openingHours!.openNow! ? 'Open Now' : 'Closed',
+                            place.openingHours!.openNow!
+                                ? 'Open Now'
+                                : 'Closed',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -615,7 +650,9 @@ class _NearbyAttractionTile extends StatelessWidget {
   String _formatTypes(List<String> types) {
     final formattedTypes = types.map((type) {
       return type.replaceAll('_', ' ').split(' ').map((word) {
-        return word.isNotEmpty ? '${word[0].toUpperCase()}${word.substring(1)}' : '';
+        return word.isNotEmpty
+            ? '${word[0].toUpperCase()}${word.substring(1)}'
+            : '';
       }).join(' ');
     }).toList();
     return formattedTypes.take(2).join(' • ');

@@ -18,7 +18,7 @@ class NearbyAttractionsPage extends StatelessWidget {
   const NearbyAttractionsPage({
     super.key,
     required this.place,
-    this.apiKey,  
+    this.apiKey,
     required this.tripId,
     required this.locationIndex,
   });
@@ -27,12 +27,13 @@ class NearbyAttractionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<AttractionsProvider>(
       create: (_) => AttractionsProvider(
-        place: place, 
+        place: place,
         apiKey: apiKey,
-        tripService: TripService(auth: Provider.of<Auth>(context, listen: false)),
+        tripService:
+            TripService(auth: Provider.of<Auth>(context, listen: false)),
         tripId: tripId,
         locationIndex: locationIndex,
-        ),
+      ),
       child: const _NearbyAttractionsView(),
     );
   }
@@ -59,7 +60,7 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
     final provider = Provider.of<AttractionsProvider>(context);
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor:  Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         toolbarHeight: 65,
         title: Column(
@@ -85,7 +86,8 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 14.0, right: 14.0, top: 8.0, bottom: 16),
+            padding: const EdgeInsets.only(
+                left: 14.0, right: 14.0, top: 8.0, bottom: 16),
             child: Row(
               children: [
                 Expanded(
@@ -100,7 +102,6 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
                       hintStyle: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.grey.shade500,
                       ),
-                      
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
@@ -122,22 +123,24 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
                       isDense: true,
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          provider.fetchNearbyAttractions(query: _searchController.text.trim());
+                          provider.fetchNearbyAttractions(
+                              query: _searchController.text.trim());
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer.withOpacity(0.9),
+                            color: theme.colorScheme.primaryContainer
+                                .withOpacity(0.9),
                             borderRadius: BorderRadius.horizontal(
                               left: Radius.circular(0),
                               right: Radius.circular(9),
                             ),
                           ),
                           child: const Icon(
-                            Icons.search, 
+                            Icons.search,
                             color: Colors.white,
                             size: 20,
-                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -150,9 +153,14 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
             child: provider.loading
                 ? const Center(child: CircularProgressIndicator())
                 : provider.error != null
-                    ? Center(child: Text(provider.error!, style: theme.textTheme.bodyMedium))
-                    : provider.attractions == null || provider.attractions!.isEmpty
-                        ? Center(child: Text('No attractions found.', style: theme.textTheme.bodyMedium))
+                    ? Center(
+                        child: Text(provider.error!,
+                            style: theme.textTheme.bodyMedium))
+                    : provider.attractions == null ||
+                            provider.attractions!.isEmpty
+                        ? Center(
+                            child: Text('No attractions found.',
+                                style: theme.textTheme.bodyMedium))
                         : ListView.separated(
                             padding: EdgeInsets.zero,
                             itemCount: provider.attractions!.length,
@@ -162,10 +170,16 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
                             ),
                             itemBuilder: (context, index) {
                               final attraction = provider.attractions![index];
-                              final isSaved = provider.isAttractionSaved(attraction.placeId);
-                              final images = provider.getAttractionImages(attraction.placeId);
-                              final isLoadingMore = provider.isLoadingAdditionalImages(attraction.placeId);
-                              final openingHours = provider.getAttractionOpeningHours(attraction.placeId);
+                              final isSaved = provider
+                                  .isAttractionSaved(attraction.placeId);
+                              final images = provider
+                                  .getAttractionImages(attraction.placeId);
+                              final isLoadingMore =
+                                  provider.isLoadingAdditionalImages(
+                                      attraction.placeId);
+                              final openingHours =
+                                  provider.getAttractionOpeningHours(
+                                      attraction.placeId);
                               return _AttractionTile(
                                 attraction: attraction,
                                 isSaved: isSaved,
@@ -173,11 +187,14 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
                                   AttractionModel(
                                     placeId: attraction.placeId ?? '',
                                     name: attraction.name ?? '',
-                                    image: attraction.photos?.firstOrNull?.photoReference ?? '',
+                                    image: attraction.photos?.firstOrNull
+                                            ?.photoReference ??
+                                        '',
                                     rating: attraction.rating ?? 0,
                                     type: attraction.types?.firstOrNull ?? '',
-                                  ), context,
                                   ),
+                                  context,
+                                ),
                                 imageUrls: images,
                                 isLoadingMore: isLoadingMore,
                                 openingHours: openingHours,
@@ -214,35 +231,36 @@ class _AttractionTile extends StatefulWidget {
 
 class _AttractionTileState extends State<_AttractionTile> {
   int _currentImageIndex = 0;
-  final CarouselSliderController _carouselController = CarouselSliderController();
-  
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
+
   String? _getCurrentDayOpeningHours() {
     if (widget.openingHours == null || widget.openingHours!.isEmpty) {
       return null;
     }
-    
+
     // Get current day of week (0 = Sunday, 1 = Monday, etc.)
     final now = DateTime.now();
     final dayOfWeek = now.weekday % 7; // Convert to 0-based where 0 is Sunday
-    
+
     // Days in the API are ordered from Sunday (0) to Saturday (6)
     if (dayOfWeek < widget.openingHours!.length) {
       return widget.openingHours![dayOfWeek];
     }
-    
+
     return null;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     // Get current day's opening hours
     final todayHours = _getCurrentDayOpeningHours();
-    
+
     return Container(
-      color:  Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -266,7 +284,7 @@ class _AttractionTileState extends State<_AttractionTile> {
                   padEnds: false,
                 ),
               ),
-              
+
               // Navigation Controls
               if (widget.imageUrls.length > 2)
                 Positioned.fill(
@@ -300,7 +318,7 @@ class _AttractionTileState extends State<_AttractionTile> {
                         )
                       else
                         const SizedBox(width: 40),
-                        
+
                       // Next Button
                       if (_currentImageIndex < widget.imageUrls.length - 2)
                         GestureDetector(
@@ -331,20 +349,21 @@ class _AttractionTileState extends State<_AttractionTile> {
                     ],
                   ),
                 ),
-                
+
               // Image Counter
               if (widget.imageUrls.length > 1)
                 Positioned(
                   bottom: 8,
                   right: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.6),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      '${_currentImageIndex + 1}/${widget.imageUrls.length-1}',
+                      '${_currentImageIndex + 1}/${widget.imageUrls.length - 1}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -355,7 +374,7 @@ class _AttractionTileState extends State<_AttractionTile> {
                 ),
             ],
           ),
-          
+
           // Content Row
           Padding(
             padding: const EdgeInsets.all(16),
@@ -370,7 +389,7 @@ class _AttractionTileState extends State<_AttractionTile> {
                       children: [
                         Text(
                           widget.attraction.name ?? 'Unknown',
-                          style: theme.textTheme.bodyLarge?.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
                           ),
@@ -379,7 +398,7 @@ class _AttractionTileState extends State<_AttractionTile> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          widget.attraction.types?.isNotEmpty == true 
+                          widget.attraction.types?.isNotEmpty == true
                               ? _formatTypes(widget.attraction.types!)
                               : 'Tourist Attraction',
                           style: theme.textTheme.bodySmall?.copyWith(
@@ -403,9 +422,9 @@ class _AttractionTileState extends State<_AttractionTile> {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(width: 16),
-                  
+
                   // Right Column - Save Button, Rating, Hours
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -417,8 +436,12 @@ class _AttractionTileState extends State<_AttractionTile> {
                           InkWell(
                             onTap: widget.onSaveTap,
                             child: Icon(
-                              widget.isSaved ? Icons.bookmark : Icons.bookmark_border,
-                              color: widget.isSaved ? theme.colorScheme.primary : Colors.grey,
+                              widget.isSaved
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_border,
+                              color: widget.isSaved
+                                  ? theme.colorScheme.primary
+                                  : Colors.grey,
                               size: 24,
                             ),
                           ),
@@ -426,16 +449,18 @@ class _AttractionTileState extends State<_AttractionTile> {
                             'Save',
                             style: TextStyle(
                               fontSize: 10,
-                              color: widget.isSaved ? theme.colorScheme.primary : Colors.grey,
+                              color: widget.isSaved
+                                  ? theme.colorScheme.primary
+                                  : Colors.grey,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16),
                       const Spacer(),
-                      
+
                       // Rating and Hours
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -444,7 +469,8 @@ class _AttractionTileState extends State<_AttractionTile> {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.star, color: Colors.amber, size: 16),
+                                const Icon(Icons.star,
+                                    color: Colors.amber, size: 16),
                                 Text(
                                   ' ${widget.attraction.rating}',
                                   style: theme.textTheme.bodySmall?.copyWith(
@@ -456,28 +482,36 @@ class _AttractionTileState extends State<_AttractionTile> {
                           if (todayHours != null)
                             Container(
                               margin: const EdgeInsets.only(top: 4),
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: widget.attraction.openingHours?.openNow == true
-                                    ? Colors.green.shade50
-                                    : Colors.blue.shade50,
+                                color:
+                                    widget.attraction.openingHours?.openNow ==
+                                            true
+                                        ? Colors.green.shade50
+                                        : Colors.blue.shade50,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                todayHours.split(': ')[1], // Extract just the hours part
+                                todayHours.split(
+                                    ': ')[1], // Extract just the hours part
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
-                                  color: widget.attraction.openingHours?.openNow == true
-                                      ? Colors.green.shade700
-                                      : Colors.blue.shade700,
+                                  color:
+                                      widget.attraction.openingHours?.openNow ==
+                                              true
+                                          ? Colors.green.shade700
+                                          : Colors.blue.shade700,
                                 ),
                               ),
                             )
-                          else if (widget.attraction.openingHours?.openNow != null)
+                          else if (widget.attraction.openingHours?.openNow !=
+                              null)
                             Container(
                               margin: const EdgeInsets.only(top: 4),
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
                                 color: widget.attraction.openingHours!.openNow!
                                     ? Colors.green.shade50
@@ -485,13 +519,16 @@ class _AttractionTileState extends State<_AttractionTile> {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                widget.attraction.openingHours!.openNow! ? 'Open Now' : 'Closed',
+                                widget.attraction.openingHours!.openNow!
+                                    ? 'Open Now'
+                                    : 'Closed',
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
-                                  color: widget.attraction.openingHours!.openNow!
-                                      ? Colors.green.shade700
-                                      : Colors.red.shade700,
+                                  color:
+                                      widget.attraction.openingHours!.openNow!
+                                          ? Colors.green.shade700
+                                          : Colors.red.shade700,
                                 ),
                               ),
                             ),
@@ -507,15 +544,15 @@ class _AttractionTileState extends State<_AttractionTile> {
       ),
     );
   }
-  
+
   List<Widget> _buildCarouselItems(double screenWidth) {
     final List<String> displayImages = [...widget.imageUrls];
-    
+
     // Ensure we have at least 2 images
     while (displayImages.length < 2) {
       displayImages.add('https://via.placeholder.com/400x200?text=No+Image');
     }
-    
+
     return displayImages.map((imageUrl) {
       return SizedBox(
         width: screenWidth / 2 - 1, // Half screen width minus separator
@@ -529,7 +566,7 @@ class _AttractionTileState extends State<_AttractionTile> {
       );
     }).toList();
   }
-  
+
   Widget _buildLoadingImagePlaceholder() {
     return Container(
       height: 160,
@@ -539,7 +576,7 @@ class _AttractionTileState extends State<_AttractionTile> {
       ),
     );
   }
-  
+
   Widget _buildErrorImagePlaceholder() {
     return Container(
       height: 160,
@@ -547,16 +584,18 @@ class _AttractionTileState extends State<_AttractionTile> {
       child: const Center(child: Icon(Icons.image, size: 40)),
     );
   }
-  
+
   String _formatTypes(List<String> types) {
     // Format the types to be more readable
     final formattedTypes = types.map((type) {
       return type.replaceAll('_', ' ').split(' ').map((word) {
-        return word.isNotEmpty ? '${word[0].toUpperCase()}${word.substring(1)}' : '';
+        return word.isNotEmpty
+            ? '${word[0].toUpperCase()}${word.substring(1)}'
+            : '';
       }).join(' ');
     }).toList();
-    
+
     // Return only the first two types
     return formattedTypes.take(2).join(' • ');
   }
-} 
+}

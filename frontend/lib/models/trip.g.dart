@@ -18,6 +18,11 @@ Trip _$TripFromJson(Map<String, dynamic> json) => Trip(
       budget: json['budget'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
+      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      collaborators: (json['collaborators'] as List<dynamic>?)
+          ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      isOwner: json['isOwner'] as bool?,
     );
 
 Map<String, dynamic> _$TripToJson(Trip instance) => <String, dynamic>{
@@ -29,4 +34,7 @@ Map<String, dynamic> _$TripToJson(Trip instance) => <String, dynamic>{
       'budget': instance.budget,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
+      'user': instance.user,
+      'collaborators': instance.collaborators,
+      'isOwner': instance.isOwner,
     };

@@ -42,6 +42,11 @@ class Auth extends ChangeNotifier {
     _token = newToken;
     notifyListeners();
   }
+
+  void updateProfilePhoto(String imageUrl) {
+    _user = _user?.copyWith(imageUrl: imageUrl);
+    notifyListeners();
+  }
   
   Future<bool> editProfile(User updatedUser) async {
     if (_token == null) return false;

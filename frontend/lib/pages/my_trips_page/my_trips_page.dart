@@ -58,6 +58,7 @@ class _MyTripsPageState extends State<MyTripsPage> {
       appBar: AppBar(
         title: Text('My Trips', style: Theme.of(context).textTheme.titleLarge),
         elevation: 0,
+        centerTitle: true,
       ),
       body: RefreshIndicator(onRefresh: loadTrips, child: pendingFetch? Center(child: CircularProgressIndicator())
           : fetchError!=null? Center(

@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Login Successful")));
         Navigator.pushNamedAndRemoveUntil(context, '/homepage',(Route<dynamic> route) => false);
       } else {
+        print(res.statusCode);
         print(res.body);
         _isNotvalid = res.body;
       }

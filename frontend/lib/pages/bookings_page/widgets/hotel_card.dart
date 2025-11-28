@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Hotel {
+  final String contentId; // unique id from TripAdvisor payload
   final String name;
   final String location;
   final String imageUrl;
   final double price;
   final List<String> amenities;
   final String? bookingUrl;
+  final double rating;
 
   Hotel({
+    required this.contentId,
     required this.name,
     required this.location,
     required this.imageUrl,
     required this.price,
     required this.amenities,
     this.bookingUrl,
+    required this.rating,
   });
 }
 
-Widget buildHotelCard(Hotel hotel) {
+Widget buildHotelCard(Hotel hotel, {Widget? trailing}) {
   return SizedBox(
     width: double.infinity,
     child: Card(
@@ -48,7 +52,19 @@ Widget buildHotelCard(Hotel hotel) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(hotel.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        hotel.name,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (trailing != null) trailing,
+                  ],
+                ),
                 SizedBox(height: 4),
                 Text(hotel.location, style: TextStyle(color: Colors.grey[600])),
                 SizedBox(height: 8),

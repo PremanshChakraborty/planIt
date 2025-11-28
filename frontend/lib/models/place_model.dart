@@ -5,16 +5,18 @@ class PlaceModel {
   final double? latitude;
   final double? longitude;
   final List<AttractionModel>? attractions;
-  final List<HotelModel>? hotels; 
-  
+  final List<HotelModel>? hotels;
+  final AddedBy? addedBy; // Optional, may not be present for startLocation
+
   PlaceModel({
-    required this.placeId, 
-    required this.placeName, 
+    required this.placeId,
+    required this.placeName,
     required this.day,
     this.latitude,
     this.longitude,
     this.attractions,
     this.hotels,
+    this.addedBy,
   });
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) {
@@ -24,12 +26,16 @@ class PlaceModel {
       day: json['day'] as int,
       latitude: json['latitude'] as double?,
       longitude: json['longitude'] as double?,
-      attractions: json['attractions'] != null 
-        ? (json['attractions'] as List).map((e) => AttractionModel.fromJson(e)).toList()
-        : null,
-      hotels: json['hotels'] != null 
-        ? (json['hotels'] as List).map((e) => HotelModel.fromJson(e)).toList()
-        : null,
+      attractions: json['attractions'] != null
+          ? (json['attractions'] as List)
+              .map((e) => AttractionModel.fromJson(e))
+              .toList()
+          : null,
+      hotels: json['hotels'] != null
+          ? (json['hotels'] as List).map((e) => HotelModel.fromJson(e)).toList()
+          : null,
+      addedBy:
+          json['addedBy'] != null ? AddedBy.fromJson(json['addedBy']) : null,
     );
   }
 
@@ -41,7 +47,34 @@ class PlaceModel {
       'latitude': latitude,
       'longitude': longitude,
       'attractions': attractions?.map((e) => e.toJson()).toList(),
-      //'hotels': hotels?.map((e) => e.toJson()).toList(),
+      if (hotels != null && hotels!.isNotEmpty)
+        'hotels': hotels?.map((e) => e.toJson()).toList(),
+      if (addedBy != null) 'addedBy': addedBy!.toJson(),
+    };
+  }
+}
+
+class AddedBy {
+  final String userId;
+  final String userName;
+
+  AddedBy({
+    required this.userId,
+    required this.userName,
+  });
+
+  factory AddedBy.fromJson(Map<String, dynamic> json) {
+    // Handle both old structure (userId, userName) and new populated structure (_id, name)
+    return AddedBy(
+      userId: (json['_id'] ?? json['userId'])?.toString() ?? '',
+      userName: (json['name'] ?? json['userName']) as String? ?? 'Unknown',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'userName': userName,
     };
   }
 }
@@ -52,13 +85,15 @@ class AttractionModel {
   final String image;
   final double rating;
   final String type;
-  
+  final AddedBy? addedBy; // Optional, may not be present in all responses
+
   AttractionModel({
     required this.placeId,
     required this.name,
     required this.image,
     required this.rating,
     required this.type,
+    this.addedBy,
   });
 
   factory AttractionModel.fromJson(Map<String, dynamic> json) {
@@ -66,8 +101,10 @@ class AttractionModel {
       placeId: json['placeId'],
       name: json['name'],
       image: json['image'],
-      rating: json['rating'],
+      rating: (json['rating'] as num).toDouble(),
       type: json['type'],
+      addedBy:
+          json['addedBy'] != null ? AddedBy.fromJson(json['addedBy']) : null,
     );
   }
 
@@ -78,46 +115,48 @@ class AttractionModel {
       'image': image,
       'rating': rating,
       'type': type,
+      if (addedBy != null) 'addedBy': addedBy!.toJson(),
     };
   }
-} 
+}
 
 class HotelModel {
-  final String id;
+  final String placeId;
   final String name;
-  final String imageUrl;
-  final double price;
+  final String image;
+  final String price; // backend uses string price
   final double rating;
-  final String description;
+  final AddedBy? addedBy; // Optional, may not be present in all responses
 
   HotelModel({
-    required this.id,
+    required this.placeId,
     required this.name,
-    required this.imageUrl,
+    required this.image,
     required this.price,
     required this.rating,
-    required this.description,
+    this.addedBy,
   });
 
   factory HotelModel.fromJson(Map<String, dynamic> json) {
     return HotelModel(
-      id: json['id'],
+      placeId: json['placeId'],
       name: json['name'],
-      imageUrl: json['imageUrl'],
+      image: json['image'],
       price: json['price'],
-      rating: json['rating'],
-      description: json['description'],
+      rating: (json['rating'] as num).toDouble(),
+      addedBy:
+          json['addedBy'] != null ? AddedBy.fromJson(json['addedBy']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'placeId': placeId,
       'name': name,
-      'imageUrl': imageUrl,
+      'image': image,
       'price': price,
       'rating': rating,
-      'description': description,
+      if (addedBy != null) 'addedBy': addedBy!.toJson(),
     };
   }
 }
