@@ -204,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        centerTitle: !isEditing,
         title: Text('${isEditing ? 'Edit' : 'My'} Profile',
             style: Theme.of(context).textTheme.titleLarge),
         elevation: 0,

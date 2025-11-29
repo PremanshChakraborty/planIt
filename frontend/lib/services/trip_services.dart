@@ -97,10 +97,12 @@ class TripService {
         trips.add(Trip.fromJson(entry));
       }
       return trips;
-    } catch (e) {
+    } catch (e, trace) {
       if (e is Exception) {
         rethrow;
       } else {
+        print(trace);
+        print(e);
         throw Exception("Something went wrong. Please try again.");
       }
     }

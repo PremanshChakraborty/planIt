@@ -11,11 +11,13 @@ class AttractionsProvider extends ChangeNotifier {
   final TripService tripService ;
   final String tripId;
   final int locationIndex;
+  final String currentUserId;
+  final String ownerId;
 
   List<SearchResult>? _attractions;
   bool _loading = true;
   String? _error;
-  Set<String> _savedAttractions = {};
+  Map<String,AttractionModel> _savedAttractions = {};
   final Map<String, List<String>> _attractionImages = {};
   final Map<String, bool> _loadingAdditionalImages = {};
   final Map<String, List<String>?> _attractionOpeningHours = {};
@@ -29,11 +31,17 @@ class AttractionsProvider extends ChangeNotifier {
     this.apiKey,
     required this.tripService,
     required this.tripId,
-    required this.locationIndex
+    required this.locationIndex,
+    required this.currentUserId,
+    required this.ownerId
     }) {
 
     _googlePlace = GooglePlace(apiKey ?? Constants.googlePlacesApiKey);
-    _savedAttractions = place.attractions?.map((a) => a.placeId).toSet() ?? {};
+    if(place.attractions != null || place.attractions != []){
+      for(var attraction in place.attractions!){
+        _savedAttractions[attraction.placeId] = attraction;
+      }
+    }
     fetchNearbyAttractions();
   }
 
@@ -137,10 +145,10 @@ class AttractionsProvider extends ChangeNotifier {
       return;
     }
 
-    if (_savedAttractions.contains(attraction.placeId)) {
+    if (_savedAttractions.containsKey(attraction.placeId)) {
       _savedAttractions.remove(attraction.placeId);
     } else {
-      _savedAttractions.add(attraction.placeId);
+      _savedAttractions[attraction.placeId] = attraction;
     }
     notifyListeners();
     // TODO: Call API to persist saved attractions if needed
@@ -148,7 +156,12 @@ class AttractionsProvider extends ChangeNotifier {
 
   bool isAttractionSaved(String? attractionId) {
     if (attractionId == null) return false;
-    return _savedAttractions.contains(attractionId);
+    return _savedAttractions.containsKey(attractionId);
+  }
+
+  AttractionModel? getSavedAttractionDetails(String? attractionId) {
+    if (attractionId == null) return null;
+    return _savedAttractions[attractionId];
   }
 
   List<String> getAttractionImages(String? attractionId) {

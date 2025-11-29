@@ -7,6 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/providers/auth_provider.dart';
 import 'package:travel_app/services/trip_services.dart';
+import 'package:travel_app/widgets/user_info_dialog.dart';
 import '../../providers/attractions_provider.dart';
 
 class NearbyAttractionsPage extends StatelessWidget {
@@ -14,6 +15,7 @@ class NearbyAttractionsPage extends StatelessWidget {
   final String? apiKey;
   final String tripId;
   final int locationIndex;
+  final String ownerId;
 
   const NearbyAttractionsPage({
     super.key,
@@ -21,6 +23,7 @@ class NearbyAttractionsPage extends StatelessWidget {
     this.apiKey,
     required this.tripId,
     required this.locationIndex,
+    required this.ownerId,
   });
 
   @override
@@ -33,6 +36,8 @@ class NearbyAttractionsPage extends StatelessWidget {
             TripService(auth: Provider.of<Auth>(context, listen: false)),
         tripId: tripId,
         locationIndex: locationIndex,
+        currentUserId: Provider.of<Auth>(context, listen: false).user!.id,
+        ownerId: ownerId,
       ),
       child: const _NearbyAttractionsView(),
     );
@@ -172,6 +177,9 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
                               final attraction = provider.attractions![index];
                               final isSaved = provider
                                   .isAttractionSaved(attraction.placeId);
+                              final savedAttractionDetails =
+                                  provider.getSavedAttractionDetails(
+                                      attraction.placeId);
                               final images = provider
                                   .getAttractionImages(attraction.placeId);
                               final isLoadingMore =
@@ -183,6 +191,9 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
                               return _AttractionTile(
                                 attraction: attraction,
                                 isSaved: isSaved,
+                                savedAttractionDetails: savedAttractionDetails,
+                                currentUserId: provider.currentUserId,
+                                ownerId: provider.ownerId,
                                 onSaveTap: () => provider.toggleSaveAttraction(
                                   AttractionModel(
                                     placeId: attraction.placeId ?? '',
@@ -211,6 +222,9 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
 class _AttractionTile extends StatefulWidget {
   final SearchResult attraction;
   final bool isSaved;
+  final AttractionModel? savedAttractionDetails;
+  final String currentUserId;
+  final String ownerId;
   final VoidCallback onSaveTap;
   final List<String> imageUrls;
   final bool isLoadingMore;
@@ -219,6 +233,9 @@ class _AttractionTile extends StatefulWidget {
   const _AttractionTile({
     required this.attraction,
     required this.isSaved,
+    this.savedAttractionDetails,
+    required this.currentUserId,
+    required this.ownerId,
     required this.onSaveTap,
     required this.imageUrls,
     required this.isLoadingMore,
@@ -419,6 +436,48 @@ class _AttractionTileState extends State<_AttractionTile> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
+                        if (widget.isSaved &&
+                            widget.savedAttractionDetails?.addedBy != null) ...[
+                          const SizedBox(height: 6),
+                          GestureDetector(
+                            onTap: () {
+                              UserInfoDialog.show(
+                                context,
+                                userId: widget
+                                    .savedAttractionDetails!.addedBy!.userId,
+                                role: 'Added this location',
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 10,
+                                  backgroundColor: theme.colorScheme.primary,
+                                  child: Text(
+                                    (widget.savedAttractionDetails!.addedBy!
+                                            .userName[0])
+                                        .toUpperCase(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 6),
+                                Flexible(
+                                  child: Text(
+                                    'by ${widget.savedAttractionDetails!.addedBy!.userName}',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontSize: 12,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -430,23 +489,41 @@ class _AttractionTileState extends State<_AttractionTile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      // Save Button
+                      // Save Button with conditional logic
                       Column(
                         children: [
-                          InkWell(
-                            onTap: widget.onSaveTap,
-                            child: Icon(
-                              widget.isSaved
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: widget.isSaved
-                                  ? theme.colorScheme.primary
-                                  : Colors.grey,
-                              size: 24,
-                            ),
+                          // Determine if user can interact with save button
+                          Builder(
+                            builder: (context) {
+                              final bool canEdit = !widget.isSaved ||
+                                  widget.currentUserId == widget.ownerId ||
+                                  (widget.savedAttractionDetails?.addedBy ==
+                                      null) ||
+                                  (widget.savedAttractionDetails?.addedBy
+                                          ?.userId ==
+                                      widget.currentUserId);
+                              final bool showTick = !canEdit;
+
+                              return InkWell(
+                                onTap: canEdit ? widget.onSaveTap : null,
+                                child: Icon(
+                                  showTick
+                                      ? Icons.check_circle
+                                      : (widget.isSaved
+                                          ? Icons.bookmark
+                                          : Icons.bookmark_border),
+                                  color: showTick
+                                      ? Colors.green
+                                      : (widget.isSaved
+                                          ? theme.colorScheme.primary
+                                          : Colors.grey),
+                                  size: 24,
+                                ),
+                              );
+                            },
                           ),
                           Text(
-                            'Save',
+                            widget.isSaved ? 'Saved' : 'Save',
                             style: TextStyle(
                               fontSize: 10,
                               color: widget.isSaved
