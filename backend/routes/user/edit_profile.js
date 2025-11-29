@@ -4,8 +4,13 @@ const Joi = require('joi').extend(require('joi-phone-number'));
 const { User, validateUser } = require('../../models/user');
 const auth = require('../../middleware/auth');
 const winston = require('winston');
+const cloudinaryController = require('../cloudinary/cloudinaryController');
 
 const router = express.Router();
+
+router.get('/upload-signature', auth, cloudinaryController.getUploadSignature);
+
+router.patch('/update-photo', auth, cloudinaryController.updateProfileImage);
 
 router.put('/', auth, async (req, res) => {
     // Validate request body

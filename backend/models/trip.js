@@ -16,6 +16,7 @@ const tripSchema = new mongoose.Schema(
             type: { type: String, required: true, trim: true },
             rating: { type: Number, required: true },
             image: { type: String, required: true, trim: true },
+            addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
           }
         ],
       },
@@ -28,6 +29,7 @@ const tripSchema = new mongoose.Schema(
           day: { type: Number, required: true, min: 1 },
           latitude: { type: Number, required: false },
           longitude: { type: Number, required: false },
+          addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
           attractions: {
             type: [
               {
@@ -36,6 +38,21 @@ const tripSchema = new mongoose.Schema(
                 type: { type: String, required: true, trim: true },
                 rating: { type: Number, required: true },
                 image: { type: String, required: true, trim: true },
+                addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+              }
+            ],
+            default: [],
+          },
+          // New: hotels array mirroring attractions but with 'price' instead of 'type'
+          hotels: {
+            type: [
+              {
+                placeId: { type: String, required: true, minlength: 1, trim: true },
+                name: { type: String, required: true, minlength: 1, trim: true },
+                price: { type: String, required: true, trim: true },
+                rating: { type: Number, required: true },
+                image: { type: String, required: true, trim: true },
+                addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
               }
             ],
             default: [],
@@ -57,7 +74,8 @@ const tripSchema = new mongoose.Schema(
                 loc.day >= 1 &&
                 (loc.latitude === null || loc.latitude === undefined || typeof loc.latitude === 'number') &&
                 (loc.longitude === null || loc.longitude === undefined || typeof loc.longitude === 'number') &&
-                (loc.attractions === null || Array.isArray(loc.attractions))
+                (loc.attractions === null || Array.isArray(loc.attractions)) &&
+                (loc.hotels === null || Array.isArray(loc.hotels))
             )
           );
         },
@@ -83,6 +101,22 @@ const tripSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+    },
+    collaborators: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'User',
+      default: [],
+      validate: {
+        validator: function (collaborators) {
+          // Ensure collaborators array doesn't contain the owner
+          if (this.user && collaborators.includes(this.user)) {
+            return false;
+          }
+          // Ensure no duplicate collaborators
+          return collaborators.length === new Set(collaborators).size;
+        },
+        message: 'Collaborators cannot include the owner and must be unique'
+      }
     },
   },
   { timestamps: true }

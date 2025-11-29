@@ -24,10 +24,16 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         maxlength: 1024//hashed password can be long
     },
-    imageUrl: {
-        type: String,
-        validate: [validator.isURL, 'Invalid image URL'], 
-    },
+    imageUrl: { 
+        type: String, 
+        default: null, 
+      },
+      
+      // NEW FIELD: No DB reset needed!
+      imagePublicId: { 
+        type: String, 
+        default: null 
+      },
     phone: {
         type: String,
         vadidate: [validator.isMobilePhone,'Invalid Phone Number'],
