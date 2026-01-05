@@ -1,252 +1,39 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
-import 'package:travel_app/models/place_model.dart';
-import 'package:google_place/google_place.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:provider/provider.dart';
-import 'package:travel_app/providers/auth_provider.dart';
-import 'package:travel_app/services/trip_services.dart';
+import 'package:google_place/google_place.dart';
+import 'package:travel_app/models/place_model.dart';
 import 'package:travel_app/widgets/user_info_dialog.dart';
-import '../../providers/attractions_provider.dart';
 
-class NearbyAttractionsPage extends StatelessWidget {
-  final PlaceModel place;
-  final String? apiKey;
-  final String tripId;
-  final int locationIndex;
-  final String ownerId;
-
-  const NearbyAttractionsPage({
-    super.key,
-    required this.place,
-    this.apiKey,
-    required this.tripId,
-    required this.locationIndex,
-    required this.ownerId,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AttractionsProvider>(
-      create: (_) => AttractionsProvider(
-        place: place,
-        apiKey: apiKey,
-        tripService:
-            TripService(auth: Provider.of<Auth>(context, listen: false)),
-        tripId: tripId,
-        locationIndex: locationIndex,
-        currentUserId: Provider.of<Auth>(context, listen: false).user!.id,
-        ownerId: ownerId,
-      ),
-      child: const _NearbyAttractionsView(),
-    );
-  }
-}
-
-class _NearbyAttractionsView extends StatefulWidget {
-  const _NearbyAttractionsView();
-
-  @override
-  State<_NearbyAttractionsView> createState() => _NearbyAttractionsViewState();
-}
-
-class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
-  final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<AttractionsProvider>(context);
-    final theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        toolbarHeight: 65,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              provider.place.placeName,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-            Text(
-              'Nearby Attractions',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: Colors.grey.shade500,
-              ),
-            ),
-          ],
-        ),
-        iconTheme: IconThemeData(color: theme.colorScheme.onSurface),
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 14.0, right: 14.0, top: 8.0, bottom: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface,
-                    ),
-                    onTapOutside: (event) => FocusScope.of(context).unfocus(),
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search attractions...',
-                      hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey.shade500,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                      isDense: true,
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          provider.fetchNearbyAttractions(
-                              query: _searchController.text.trim());
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer
-                                .withOpacity(0.9),
-                            borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(0),
-                              right: Radius.circular(9),
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.search,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: provider.loading
-                ? const Center(child: CircularProgressIndicator())
-                : provider.error != null
-                    ? Center(
-                        child: Text(provider.error!,
-                            style: theme.textTheme.bodyMedium))
-                    : provider.attractions == null ||
-                            provider.attractions!.isEmpty
-                        ? Center(
-                            child: Text('No attractions found.',
-                                style: theme.textTheme.bodyMedium))
-                        : ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemCount: provider.attractions!.length,
-                            separatorBuilder: (_, __) => Container(
-                              height: 18,
-                              color: Colors.grey.withOpacity(0.2),
-                            ),
-                            itemBuilder: (context, index) {
-                              final attraction = provider.attractions![index];
-                              final isSaved = provider
-                                  .isAttractionSaved(attraction.placeId);
-                              final savedAttractionDetails =
-                                  provider.getSavedAttractionDetails(
-                                      attraction.placeId);
-                              final images = provider
-                                  .getAttractionImages(attraction.placeId);
-                              final isLoadingMore =
-                                  provider.isLoadingAdditionalImages(
-                                      attraction.placeId);
-                              final openingHours =
-                                  provider.getAttractionOpeningHours(
-                                      attraction.placeId);
-                              return _AttractionTile(
-                                attraction: attraction,
-                                isSaved: isSaved,
-                                savedAttractionDetails: savedAttractionDetails,
-                                currentUserId: provider.currentUserId,
-                                ownerId: provider.ownerId,
-                                onSaveTap: () => provider.toggleSaveAttraction(
-                                  AttractionModel(
-                                    placeId: attraction.placeId ?? '',
-                                    name: attraction.name ?? '',
-                                    image: attraction.photos?.firstOrNull
-                                            ?.photoReference ??
-                                        '',
-                                    rating: attraction.rating ?? 0,
-                                    type: attraction.types?.firstOrNull ?? '',
-                                  ),
-                                  context,
-                                ),
-                                imageUrls: images,
-                                isLoadingMore: isLoadingMore,
-                                openingHours: openingHours,
-                              );
-                            },
-                          ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AttractionTile extends StatefulWidget {
-  final SearchResult attraction;
+class PlaceTile extends StatefulWidget {
+  final SearchResult place;
   final bool isSaved;
-  final AttractionModel? savedAttractionDetails;
+  final AddedBy? addedBy;
   final String currentUserId;
   final String ownerId;
   final VoidCallback onSaveTap;
   final List<String> imageUrls;
   final bool isLoadingMore;
   final List<String>? openingHours;
+  final bool isHotel;
 
-  const _AttractionTile({
-    required this.attraction,
+  const PlaceTile({
+    required this.place,
     required this.isSaved,
-    this.savedAttractionDetails,
+    this.addedBy,
     required this.currentUserId,
     required this.ownerId,
     required this.onSaveTap,
     required this.imageUrls,
     required this.isLoadingMore,
     this.openingHours,
+    required this.isHotel,
   });
 
   @override
-  State<_AttractionTile> createState() => _AttractionTileState();
+  State<PlaceTile> createState() => _PlaceTileState();
 }
 
-class _AttractionTileState extends State<_AttractionTile> {
+class _PlaceTileState extends State<PlaceTile> {
   int _currentImageIndex = 0;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
@@ -255,16 +42,11 @@ class _AttractionTileState extends State<_AttractionTile> {
     if (widget.openingHours == null || widget.openingHours!.isEmpty) {
       return null;
     }
-
-    // Get current day of week (0 = Sunday, 1 = Monday, etc.)
     final now = DateTime.now();
-    final dayOfWeek = now.weekday % 7; // Convert to 0-based where 0 is Sunday
-
-    // Days in the API are ordered from Sunday (0) to Saturday (6)
+    final dayOfWeek = now.weekday % 7;
     if (dayOfWeek < widget.openingHours!.length) {
       return widget.openingHours![dayOfWeek];
     }
-
     return null;
   }
 
@@ -272,8 +54,6 @@ class _AttractionTileState extends State<_AttractionTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
-
-    // Get current day's opening hours
     final todayHours = _getCurrentDayOpeningHours();
 
     return Container(
@@ -281,7 +61,6 @@ class _AttractionTileState extends State<_AttractionTile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image Carousel
           Stack(
             children: [
               CarouselSlider(
@@ -301,14 +80,11 @@ class _AttractionTileState extends State<_AttractionTile> {
                   padEnds: false,
                 ),
               ),
-
-              // Navigation Controls
               if (widget.imageUrls.length > 2)
                 Positioned.fill(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Previous Button
                       if (_currentImageIndex > 0)
                         GestureDetector(
                           onTap: () {
@@ -335,8 +111,6 @@ class _AttractionTileState extends State<_AttractionTile> {
                         )
                       else
                         const SizedBox(width: 40),
-
-                      // Next Button
                       if (_currentImageIndex < widget.imageUrls.length - 2)
                         GestureDetector(
                           onTap: () {
@@ -366,8 +140,6 @@ class _AttractionTileState extends State<_AttractionTile> {
                     ],
                   ),
                 ),
-
-              // Image Counter
               if (widget.imageUrls.length > 1)
                 Positioned(
                   bottom: 8,
@@ -391,21 +163,18 @@ class _AttractionTileState extends State<_AttractionTile> {
                 ),
             ],
           ),
-
-          // Content Row
           Padding(
             padding: const EdgeInsets.all(16),
             child: IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Left Column - Name, Type, Address
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.attraction.name ?? 'Unknown',
+                          widget.place.name ?? 'Unknown',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
@@ -415,9 +184,11 @@ class _AttractionTileState extends State<_AttractionTile> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          widget.attraction.types?.isNotEmpty == true
-                              ? _formatTypes(widget.attraction.types!)
-                              : 'Tourist Attraction',
+                          widget.place.types?.isNotEmpty == true
+                              ? _formatTypes(widget.place.types!)
+                              : widget.isHotel
+                                  ? 'Hotel'
+                                  : 'Place',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.primary,
                             fontWeight: FontWeight.w500,
@@ -426,9 +197,9 @@ class _AttractionTileState extends State<_AttractionTile> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 8),
-                        if (widget.attraction.vicinity != null)
+                        if (widget.place.vicinity != null)
                           Text(
-                            widget.attraction.vicinity!,
+                            widget.place.vicinity!,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSecondary,
                               fontWeight: FontWeight.normal,
@@ -436,16 +207,15 @@ class _AttractionTileState extends State<_AttractionTile> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        if (widget.isSaved &&
-                            widget.savedAttractionDetails?.addedBy != null) ...[
+                        if (widget.isSaved && widget.addedBy != null) ...[
                           const SizedBox(height: 6),
                           GestureDetector(
                             onTap: () {
                               UserInfoDialog.show(
                                 context,
-                                userId: widget
-                                    .savedAttractionDetails!.addedBy!.userId,
-                                role: 'Added this location',
+                                userId: widget.addedBy!.userId,
+                                role:
+                                    'Added this ${widget.isHotel ? 'hotel' : 'place'}',
                               );
                             },
                             child: Row(
@@ -454,9 +224,7 @@ class _AttractionTileState extends State<_AttractionTile> {
                                   radius: 10,
                                   backgroundColor: theme.colorScheme.primary,
                                   child: Text(
-                                    (widget.savedAttractionDetails!.addedBy!
-                                            .userName[0])
-                                        .toUpperCase(),
+                                    (widget.addedBy!.userName[0]).toUpperCase(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 10,
@@ -467,7 +235,7 @@ class _AttractionTileState extends State<_AttractionTile> {
                                 SizedBox(width: 6),
                                 Flexible(
                                   child: Text(
-                                    'by ${widget.savedAttractionDetails!.addedBy!.userName}',
+                                    'by ${widget.addedBy!.userName}',
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       fontSize: 12,
                                     ),
@@ -481,26 +249,19 @@ class _AttractionTileState extends State<_AttractionTile> {
                       ],
                     ),
                   ),
-
                   const SizedBox(width: 16),
-
-                  // Right Column - Save Button, Rating, Hours
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      // Save Button with conditional logic
                       Column(
                         children: [
-                          // Determine if user can interact with save button
                           Builder(
                             builder: (context) {
                               final bool canEdit = !widget.isSaved ||
                                   widget.currentUserId == widget.ownerId ||
-                                  (widget.savedAttractionDetails?.addedBy ==
-                                      null) ||
-                                  (widget.savedAttractionDetails?.addedBy
-                                          ?.userId ==
+                                  (widget.addedBy == null) ||
+                                  (widget.addedBy?.userId ==
                                       widget.currentUserId);
                               final bool showTick = !canEdit;
 
@@ -534,78 +295,73 @@ class _AttractionTileState extends State<_AttractionTile> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 16),
                       const Spacer(),
-
-                      // Rating and Hours
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          if (widget.attraction.rating != null)
+                          if (widget.place.rating != null)
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Icon(Icons.star,
                                     color: Colors.amber, size: 16),
                                 Text(
-                                  ' ${widget.attraction.rating}',
+                                  ' ${widget.place.rating}',
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
                             ),
-                          if (todayHours != null)
+                          if (!widget.isHotel && todayHours != null)
                             Container(
                               margin: const EdgeInsets.only(top: 4),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
                                 color:
-                                    widget.attraction.openingHours?.openNow ==
-                                            true
+                                    widget.place.openingHours?.openNow == true
                                         ? Colors.green.shade50
                                         : Colors.blue.shade50,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                todayHours.split(
-                                    ': ')[1], // Extract just the hours part
+                                todayHours.split(': ').length > 1
+                                    ? todayHours.split(': ')[1]
+                                    : todayHours,
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                   color:
-                                      widget.attraction.openingHours?.openNow ==
-                                              true
+                                      widget.place.openingHours?.openNow == true
                                           ? Colors.green.shade700
                                           : Colors.blue.shade700,
                                 ),
                               ),
                             )
-                          else if (widget.attraction.openingHours?.openNow !=
-                              null)
+                          else if (!widget.isHotel &&
+                              widget.place.openingHours?.openNow != null)
                             Container(
                               margin: const EdgeInsets.only(top: 4),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: widget.attraction.openingHours!.openNow!
+                                color: widget.place.openingHours!.openNow!
                                     ? Colors.green.shade50
                                     : Colors.red.shade50,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                widget.attraction.openingHours!.openNow!
+                                widget.place.openingHours!.openNow!
                                     ? 'Open Now'
                                     : 'Closed',
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      widget.attraction.openingHours!.openNow!
-                                          ? Colors.green.shade700
-                                          : Colors.red.shade700,
+                                  color: widget.place.openingHours!.openNow!
+                                      ? Colors.green.shade700
+                                      : Colors.red.shade700,
                                 ),
                               ),
                             ),
@@ -624,15 +380,12 @@ class _AttractionTileState extends State<_AttractionTile> {
 
   List<Widget> _buildCarouselItems(double screenWidth) {
     final List<String> displayImages = [...widget.imageUrls];
-
-    // Ensure we have at least 2 images
-    while (displayImages.length < 2) {
-      displayImages.add('https://via.placeholder.com/400x200?text=No+Image');
-    }
-
+    // while (displayImages.length < 2) {
+    //   displayImages.add('https://via.placeholder.com/400x200?text=No+Image');
+    // }
     return displayImages.map((imageUrl) {
       return SizedBox(
-        width: screenWidth / 2 - 1, // Half screen width minus separator
+        width: screenWidth / 2 - 1,
         child: widget.isLoadingMore && displayImages.indexOf(imageUrl) > 0
             ? _buildLoadingImagePlaceholder()
             : Image.network(
@@ -663,7 +416,6 @@ class _AttractionTileState extends State<_AttractionTile> {
   }
 
   String _formatTypes(List<String> types) {
-    // Format the types to be more readable
     final formattedTypes = types.map((type) {
       return type.replaceAll('_', ' ').split(' ').map((word) {
         return word.isNotEmpty
@@ -671,8 +423,6 @@ class _AttractionTileState extends State<_AttractionTile> {
             : '';
       }).join(' ');
     }).toList();
-
-    // Return only the first two types
     return formattedTypes.take(2).join(' • ');
   }
 }

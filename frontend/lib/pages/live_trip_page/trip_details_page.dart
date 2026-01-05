@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:google_place/google_place.dart';
 import 'package:travel_app/config/constants.dart';
 import 'package:travel_app/models/place_model.dart';
 import 'package:travel_app/models/trip.dart';
 import 'package:travel_app/models/user.dart';
-import 'package:travel_app/pages/attractions_page/attractions_page.dart';
+import 'package:travel_app/pages/explore_page/attractions_page/attractions_page.dart';
+import 'package:travel_app/pages/explore_page/explorePage.dart';
+import 'package:travel_app/pages/explore_page/hotels_page/hotels_page.dart';
 import 'package:travel_app/providers/auth_provider.dart';
 import 'package:travel_app/services/trip_services.dart';
 import 'package:travel_app/pages/bookings_page/bookings_page.dart';
@@ -265,16 +268,12 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BookingPage(
-                  prefillLocation: place.placeName,
-                  prefillStartDate: arrivalDate,
-                  prefillEndDate:
-                      arrivalDate.add(Duration(days: place.day - 1)),
-                  prefillAdults: widget.trip.guests,
+                builder: (context) => NearbyHotelsPage(
+                  place: place,
+                  apiKey: Constants.googlePlacesApiKey,
                   tripId: widget.trip.id,
                   locationIndex: index,
-                  savedHotelIds:
-                      (place.hotels ?? []).map((h) => h.placeId).toSet(),
+                  ownerId: widget.trip.user.id,
                 ),
               ),
             ).then((_) => _refreshTrip());
@@ -283,12 +282,13 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => NearbyAttractionsPage(
+                    builder: (context) => ExplorePage(
                           place: place,
                           apiKey: Constants.googlePlacesApiKey,
                           tripId: widget.trip.id,
                           locationIndex: index,
                           ownerId: widget.trip.user.id,
+                          tab: 0,
                         ))).then((value) {
               _refreshTrip();
             });
@@ -746,7 +746,7 @@ class _LocationCardState extends State<_LocationCard> {
   }
 }
 
-class _HotelCard extends StatelessWidget {
+class _HotelCard extends StatefulWidget {
   final HotelModel hotel;
   final User owner;
 
@@ -756,11 +756,54 @@ class _HotelCard extends StatelessWidget {
   });
 
   @override
+  State<_HotelCard> createState() => _HotelCardState();
+}
+
+class _HotelCardState extends State<_HotelCard> {
+  String? _photoUrl;
+  bool _isLoading = true;
+  late GooglePlace _googlePlace;
+
+  @override
+  void initState() {
+    super.initState();
+    _googlePlace = GooglePlace(Constants.googlePlacesApiKey);
+    _fetchFreshPhoto();
+  }
+
+  Future<void> _fetchFreshPhoto() async {
+    try {
+      final details = await _googlePlace.details.get(widget.hotel.placeId);
+      if (details?.result?.photos?.isNotEmpty == true) {
+        if (mounted) {
+          setState(() {
+            _photoUrl =
+                'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${details!.result!.photos!.first.photoReference}&key=${Constants.googlePlacesApiKey}';
+            _isLoading = false;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
-      width: 200,
+      width: 240,
       margin: const EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -779,17 +822,39 @@ class _HotelCard extends StatelessWidget {
           // Hotel Image
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.network(
-              hotel.image,
-              height: 80,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                height: 80,
-                color: Colors.grey.shade300,
-                child: const Center(child: Icon(Icons.image, size: 40)),
-              ),
-            ),
+            child: _isLoading
+                ? Container(
+                    height: 100,
+                    width: double.infinity,
+                    color: Colors.grey.shade200,
+                    child: const Center(
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                  )
+                : _photoUrl != null
+                    ? Image.network(
+                        _photoUrl!,
+                        height: 100,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) {
+                          return Container(
+                            height: 100,
+                            color: Colors.grey.shade300,
+                            child: const Center(
+                                child: Icon(Icons.image, size: 40)),
+                          );
+                        },
+                      )
+                    : Container(
+                        height: 100,
+                        color: Colors.grey.shade300,
+                        child: const Center(child: Icon(Icons.hotel, size: 40)),
+                      ),
           ),
           // Hotel Details
           Padding(
@@ -797,41 +862,37 @@ class _HotelCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  hotel.name,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
                 Row(
                   children: [
+                    SizedBox(
+                      width: 180,
+                      child: Text(
+                        widget.hotel.name,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Spacer(),
                     const Icon(Icons.star, color: Colors.amber, size: 16),
                     Text(
-                      ' ${hotel.rating}',
+                      ' ${widget.hotel.rating}',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSecondary,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    const Spacer(),
-                    Text(
-                      hotel.price,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
                   ],
                 ),
-                if (hotel.addedBy != null) ...[
+                if (widget.hotel.addedBy != null) ...[
                   const SizedBox(height: 6),
                   GestureDetector(
                     onTap: () {
                       UserInfoDialog.show(
                         context,
-                        userId: hotel.addedBy!.userId,
+                        userId: widget.hotel.addedBy!.userId,
                         role: 'Added this hotel',
                       );
                     },
@@ -841,8 +902,9 @@ class _HotelCard extends StatelessWidget {
                           radius: 8,
                           backgroundColor: theme.colorScheme.primary,
                           child: Text(
-                            hotel.addedBy!.userName.isNotEmpty
-                                ? hotel.addedBy!.userName[0].toUpperCase()
+                            widget.hotel.addedBy!.userName.isNotEmpty
+                                ? widget.hotel.addedBy!.userName[0]
+                                    .toUpperCase()
                                 : '?',
                             style: const TextStyle(
                               color: Colors.white,
@@ -854,7 +916,7 @@ class _HotelCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            'by ${hotel.addedBy!.userName}',
+                            'by ${widget.hotel.addedBy!.userName}',
                             style: theme.textTheme.bodySmall?.copyWith(
                               fontSize: 10,
                               color: Colors.grey[600],
@@ -896,6 +958,43 @@ class _AttractionCard extends StatefulWidget {
 
 class _AttractionCardState extends State<_AttractionCard> {
   bool _isDeleteMode = false;
+  String? _photoUrl;
+  bool _isLoadingPhoto = true;
+  late GooglePlace _googlePlace;
+
+  @override
+  void initState() {
+    super.initState();
+    _googlePlace = GooglePlace(Constants.googlePlacesApiKey);
+    _fetchFreshPhoto();
+  }
+
+  Future<void> _fetchFreshPhoto() async {
+    try {
+      final details = await _googlePlace.details.get(widget.attraction.placeId);
+      if (details?.result?.photos?.isNotEmpty == true) {
+        if (mounted) {
+          setState(() {
+            _photoUrl =
+                'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${details!.result!.photos!.first.photoReference}&key=${Constants.googlePlacesApiKey}';
+            _isLoadingPhoto = false;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            _isLoadingPhoto = false;
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoadingPhoto = false;
+        });
+      }
+    }
+  }
 
   Future<void> _showDeleteConfirmation() async {
     final bool? confirmed = await showDialog<bool>(
@@ -1000,12 +1099,41 @@ class _AttractionCardState extends State<_AttractionCard> {
                     ClipRRect(
                       borderRadius:
                           const BorderRadius.vertical(top: Radius.circular(12)),
-                      child: Image.network(
-                        'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${widget.attraction.image}&key=${Constants.googlePlacesApiKey}',
-                        height: 100,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
+                      child: _isLoadingPhoto
+                          ? Container(
+                              height: 100,
+                              width: double.infinity,
+                              color: Colors.grey.shade200,
+                              child: const Center(
+                                child: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                              ),
+                            )
+                          : _photoUrl != null
+                              ? Image.network(
+                                  _photoUrl!,
+                                  height: 100,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) {
+                                    return Container(
+                                      height: 100,
+                                      color: Colors.grey.shade300,
+                                      child: const Center(
+                                          child: Icon(Icons.image, size: 40)),
+                                    );
+                                  },
+                                )
+                              : Container(
+                                  height: 100,
+                                  color: Colors.grey.shade300,
+                                  child: const Center(
+                                      child: Icon(Icons.attractions, size: 40)),
+                                ),
                     ),
                     if (isOwner)
                       Positioned(

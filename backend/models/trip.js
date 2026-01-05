@@ -17,6 +17,8 @@ const tripSchema = new mongoose.Schema(
             rating: { type: Number, required: true },
             image: { type: String, required: true, trim: true },
             addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+            latitude: { type: Number, required: false },
+            longitude: { type: Number, required: false },
           }
         ],
       },
@@ -39,6 +41,8 @@ const tripSchema = new mongoose.Schema(
                 rating: { type: Number, required: true },
                 image: { type: String, required: true, trim: true },
                 addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+                latitude: { type: Number, required: false },
+                longitude: { type: Number, required: false },
               }
             ],
             default: [],
@@ -49,10 +53,12 @@ const tripSchema = new mongoose.Schema(
               {
                 placeId: { type: String, required: true, minlength: 1, trim: true },
                 name: { type: String, required: true, minlength: 1, trim: true },
-                price: { type: String, required: true, trim: true },
+                price: { type: String, required: false, trim: true },
                 rating: { type: Number, required: true },
                 image: { type: String, required: true, trim: true },
                 addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+                latitude: { type: Number, required: false },
+                longitude: { type: Number, required: false },
               }
             ],
             default: [],

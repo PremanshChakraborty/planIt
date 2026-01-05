@@ -85,6 +85,8 @@ class AttractionModel {
   final String image;
   final double rating;
   final String type;
+  final double? latitude;
+  final double? longitude;
   final AddedBy? addedBy; // Optional, may not be present in all responses
 
   AttractionModel({
@@ -93,6 +95,8 @@ class AttractionModel {
     required this.image,
     required this.rating,
     required this.type,
+    this.latitude,
+    this.longitude,
     this.addedBy,
   });
 
@@ -103,6 +107,12 @@ class AttractionModel {
       image: json['image'],
       rating: (json['rating'] as num).toDouble(),
       type: json['type'],
+      latitude: json['latitude'] != null
+          ? (json['latitude'] as num).toDouble()
+          : null,
+      longitude: json['longitude'] != null
+          ? (json['longitude'] as num).toDouble()
+          : null,
       addedBy:
           json['addedBy'] != null ? AddedBy.fromJson(json['addedBy']) : null,
     );
@@ -115,6 +125,8 @@ class AttractionModel {
       'image': image,
       'rating': rating,
       'type': type,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
       if (addedBy != null) 'addedBy': addedBy!.toJson(),
     };
   }
@@ -124,16 +136,21 @@ class HotelModel {
   final String placeId;
   final String name;
   final String image;
-  final String price; // backend uses string price
+  final String
+      price; // backend uses string price, defaults to "N/A" for Google Places
   final double rating;
+  final double? latitude;
+  final double? longitude;
   final AddedBy? addedBy; // Optional, may not be present in all responses
 
   HotelModel({
     required this.placeId,
     required this.name,
     required this.image,
-    required this.price,
+    this.price = 'N/A',
     required this.rating,
+    this.latitude,
+    this.longitude,
     this.addedBy,
   });
 
@@ -142,8 +159,14 @@ class HotelModel {
       placeId: json['placeId'],
       name: json['name'],
       image: json['image'],
-      price: json['price'],
+      price: json['price'] ?? 'N/A',
       rating: (json['rating'] as num).toDouble(),
+      latitude: json['latitude'] != null
+          ? (json['latitude'] as num).toDouble()
+          : null,
+      longitude: json['longitude'] != null
+          ? (json['longitude'] as num).toDouble()
+          : null,
       addedBy:
           json['addedBy'] != null ? AddedBy.fromJson(json['addedBy']) : null,
     );
@@ -156,6 +179,8 @@ class HotelModel {
       'image': image,
       'price': price,
       'rating': rating,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
       if (addedBy != null) 'addedBy': addedBy!.toJson(),
     };
   }

@@ -224,7 +224,7 @@ class _MapsPageState extends State<MapsPage> {
           );
           markers.add(marker);
         }
-      }
+      } 
       _safeSetState(() {
         _markers = markers.toSet();
         _nearbyResults = result.results!;

@@ -438,3 +438,6 @@ Error: listen EADDRINUSE: address already in use 0.0.0.0:3000
     at listenInCluster (node:net:1996:12)
     at node:net:2205:7
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[2026-01-05T08:05:31.575Z] ERROR: uncaughtException: querySrv ETIMEOUT _mongodb._tcp.cluster0.ru7rx.mongodb.net
+Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.ru7rx.mongodb.net
+    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)
