@@ -120,8 +120,8 @@ class _SearchPageState extends State<SearchPage> {
                     placeId: prediction.placeId ?? '',
                     placeName: prediction.description ?? '',
                     day: _selectedDays,
-                    latitude: double.tryParse(prediction.lat ?? ''),
-                    longitude: double.tryParse(prediction.lng ?? ''),
+                    latitude: double.tryParse(prediction.lat ?? '0') ?? 0.0,
+                    longitude: double.tryParse(prediction.lng ?? '0') ?? 0.0,
                   ),
                 );
               },

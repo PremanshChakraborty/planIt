@@ -176,8 +176,10 @@ class _NearbyHotelsViewState extends State<_NearbyHotelsView> {
                                         '',
                                     rating: hotel.rating ?? 0,
                                     price: 'N/A',
-                                    latitude: hotel.geometry?.location?.lat,
-                                    longitude: hotel.geometry?.location?.lng,
+                                    latitude:
+                                        hotel.geometry?.location?.lat ?? 0.0,
+                                    longitude:
+                                        hotel.geometry?.location?.lng ?? 0.0,
                                   ),
                                   context,
                                 ),

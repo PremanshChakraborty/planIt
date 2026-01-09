@@ -45,18 +45,12 @@ class HotelsProvider extends ChangeNotifier {
   }
 
   void fetchNearbyHotels({String? query}) async {
-    if (place.latitude == null || place.longitude == null) {
-      _loading = false;
-      _error = "Location coordinates not available.";
-      notifyListeners();
-      return;
-    }
     _loading = true;
     _error = null;
     notifyListeners();
     try {
       final response = await _googlePlace.search.getNearBySearch(
-        Location(lat: place.latitude!, lng: place.longitude!),
+        Location(lat: place.latitude, lng: place.longitude),
         50000,
         type: "lodging",
         keyword: (query != null && query.isNotEmpty) ? query : null,

@@ -2,8 +2,8 @@ class PlaceModel {
   final String placeId;
   final String placeName;
   final int day;
-  final double? latitude;
-  final double? longitude;
+  final double latitude;
+  final double longitude;
   final List<AttractionModel>? attractions;
   final List<HotelModel>? hotels;
   final AddedBy? addedBy; // Optional, may not be present for startLocation
@@ -12,8 +12,8 @@ class PlaceModel {
     required this.placeId,
     required this.placeName,
     required this.day,
-    this.latitude,
-    this.longitude,
+    required this.latitude,
+    required this.longitude,
     this.attractions,
     this.hotels,
     this.addedBy,
@@ -24,8 +24,8 @@ class PlaceModel {
       placeId: json['placeId'] as String,
       placeName: json['placeName'] as String,
       day: json['day'] as int,
-      latitude: json['latitude'] as double?,
-      longitude: json['longitude'] as double?,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
       attractions: json['attractions'] != null
           ? (json['attractions'] as List)
               .map((e) => AttractionModel.fromJson(e))
@@ -85,8 +85,8 @@ class AttractionModel {
   final String image;
   final double rating;
   final String type;
-  final double? latitude;
-  final double? longitude;
+  final double latitude;
+  final double longitude;
   final AddedBy? addedBy; // Optional, may not be present in all responses
 
   AttractionModel({
@@ -95,8 +95,8 @@ class AttractionModel {
     required this.image,
     required this.rating,
     required this.type,
-    this.latitude,
-    this.longitude,
+    required this.latitude,
+    required this.longitude,
     this.addedBy,
   });
 
@@ -107,12 +107,8 @@ class AttractionModel {
       image: json['image'],
       rating: (json['rating'] as num).toDouble(),
       type: json['type'],
-      latitude: json['latitude'] != null
-          ? (json['latitude'] as num).toDouble()
-          : null,
-      longitude: json['longitude'] != null
-          ? (json['longitude'] as num).toDouble()
-          : null,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
       addedBy:
           json['addedBy'] != null ? AddedBy.fromJson(json['addedBy']) : null,
     );
@@ -125,8 +121,8 @@ class AttractionModel {
       'image': image,
       'rating': rating,
       'type': type,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
+      'latitude': latitude,
+      'longitude': longitude,
       if (addedBy != null) 'addedBy': addedBy!.toJson(),
     };
   }
@@ -139,8 +135,8 @@ class HotelModel {
   final String
       price; // backend uses string price, defaults to "N/A" for Google Places
   final double rating;
-  final double? latitude;
-  final double? longitude;
+  final double latitude;
+  final double longitude;
   final AddedBy? addedBy; // Optional, may not be present in all responses
 
   HotelModel({
@@ -149,8 +145,8 @@ class HotelModel {
     required this.image,
     this.price = 'N/A',
     required this.rating,
-    this.latitude,
-    this.longitude,
+    required this.latitude,
+    required this.longitude,
     this.addedBy,
   });
 
@@ -161,12 +157,8 @@ class HotelModel {
       image: json['image'],
       price: json['price'] ?? 'N/A',
       rating: (json['rating'] as num).toDouble(),
-      latitude: json['latitude'] != null
-          ? (json['latitude'] as num).toDouble()
-          : null,
-      longitude: json['longitude'] != null
-          ? (json['longitude'] as num).toDouble()
-          : null,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
       addedBy:
           json['addedBy'] != null ? AddedBy.fromJson(json['addedBy']) : null,
     );
@@ -179,8 +171,8 @@ class HotelModel {
       'image': image,
       'price': price,
       'rating': rating,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
+      'latitude': latitude,
+      'longitude': longitude,
       if (addedBy != null) 'addedBy': addedBy!.toJson(),
     };
   }

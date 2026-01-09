@@ -87,7 +87,8 @@ class _EditTripCardState extends State<EditTripCard> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(20)),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
@@ -96,7 +97,8 @@ class _EditTripCardState extends State<EditTripCard> {
                       ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 20),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -109,20 +111,31 @@ class _EditTripCardState extends State<EditTripCard> {
                                 child: Icon(
                                   Icons.close,
                                   size: 30,
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                 ),
                               ),
-                              SizedBox(width: 12,),
+                              SizedBox(
+                                width: 12,
+                              ),
                               Text(
                                 'Edit Trip',
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               Spacer(),
                               IconButton(
-                                icon: Icon(Icons.delete_outline, color: Colors.red, size: 24),
+                                icon: Icon(Icons.delete_outline,
+                                    color: Colors.red, size: 24),
                                 style: ButtonStyle(
-                                  backgroundColor: WidgetStatePropertyAll(Colors.red.withOpacity(0.1)),
-                                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                                  backgroundColor: WidgetStatePropertyAll(
+                                      Colors.red.withOpacity(0.1)),
+                                  shape: WidgetStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12))),
                                 ),
                                 tooltip: 'Delete Trip',
                                 onPressed: () async {
@@ -130,10 +143,12 @@ class _EditTripCardState extends State<EditTripCard> {
                                     context: context,
                                     builder: (ctx) => AlertDialog(
                                       title: Text('Delete Trip'),
-                                      content: Text('Are you sure you want to delete this trip?'),
+                                      content: Text(
+                                          'Are you sure you want to delete this trip?'),
                                       actions: [
                                         TextButton(
-                                          onPressed: () => Navigator.of(ctx).pop(false),
+                                          onPressed: () =>
+                                              Navigator.of(ctx).pop(false),
                                           child: Text('Cancel'),
                                         ),
                                         ElevatedButton(
@@ -141,7 +156,8 @@ class _EditTripCardState extends State<EditTripCard> {
                                             backgroundColor: Colors.red,
                                             foregroundColor: Colors.white,
                                           ),
-                                          onPressed: () => Navigator.of(ctx).pop(true),
+                                          onPressed: () =>
+                                              Navigator.of(ctx).pop(true),
                                           child: Text('Delete'),
                                         ),
                                       ],
@@ -162,145 +178,260 @@ class _EditTripCardState extends State<EditTripCard> {
                                 children: [
                                   Column(
                                       spacing: 15,
-                                      children: List.generate(locations.length, (index) => GestureDetector(
-                                        onTap: () async {
-                                          PlaceModel? result = await Navigator.pushNamed(context, '/searchPage') as PlaceModel?;
-                                          if(result!=null){
-                                            setState(() {
-                                              // Preserve the day value when updating the location
-                                              int currentDay = locations[index].day;
-                                              locations[index] = PlaceModel(
-                                                placeId: result.placeId,
-                                                placeName: result.placeName,
-                                                latitude: result.latitude,
-                                                longitude: result.longitude,
-                                                day: currentDay,
-                                              );
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.black12)
-                      ),
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          spacing: 6,
-                          children: [
-                            SizedBox(width: 0,),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(index==0? "FROM" : "LOCATION $index",
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
-                                  ),
-                                  Text(locations[index].placeName,
-                                  overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                if (index > 0)
-                                  Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Text("DAYS",
-                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                                          ),
-                                          SizedBox(height: 2,),
-                                          Row(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  if (locations[index].day > 1) {
-                                                    setState(() {
-                                                      locations[index] = PlaceModel(
-                                                        placeId: locations[index].placeId,
-                                                        placeName: locations[index].placeName,
-                                                        day: locations[index].day - 1,
-                                                      );
-                                                    });
-                                                  }
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.all(2),
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                                    borderRadius: BorderRadius.circular(4),
+                                      children: List.generate(
+                                        locations.length,
+                                        (index) => GestureDetector(
+                                          onTap: () async {
+                                            PlaceModel? result =
+                                                await Navigator.pushNamed(
+                                                        context, '/searchPage')
+                                                    as PlaceModel?;
+                                            if (result != null) {
+                                              setState(() {
+                                                // Preserve the day value when updating the location
+                                                int currentDay =
+                                                    locations[index].day;
+                                                locations[index] = PlaceModel(
+                                                  placeId: result.placeId,
+                                                  placeName: result.placeName,
+                                                  latitude: result.latitude,
+                                                  longitude: result.longitude,
+                                                  day: currentDay,
+                                                );
+                                              });
+                                            }
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                    color: Colors.black12)),
+                                            width: double.infinity,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Row(
+                                                spacing: 6,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 0,
                                                   ),
-                                                  child: Icon(Icons.remove, size: 18),
-                                                ),
-                                              ),
-                                              SizedBox(width: 8),
-                                              Text(
-                                                "${locations[index].day}",
-                                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                  color: Theme.of(context).colorScheme.onSecondary,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              SizedBox(width: 8),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    locations[index] = PlaceModel(
-                                                      placeId: locations[index].placeId,
-                                                      placeName: locations[index].placeName,
-                                                      day: locations[index].day + 1,
-                                                    );
-                                                  });
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.all(2),
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                                    borderRadius: BorderRadius.circular(4),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          index == 0
+                                                              ? "FROM"
+                                                              : "LOCATION $index",
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyMedium
+                                                              ?.copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onSecondary),
+                                                        ),
+                                                        Text(
+                                                          locations[index]
+                                                              .placeName,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyLarge
+                                                              ?.copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onSurface),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  child: Icon(Icons.add, size: 18),
-                                                ),
+                                                  Row(
+                                                    children: [
+                                                      if (index > 0)
+                                                        Row(
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  "DAYS",
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodySmall
+                                                                      ?.copyWith(
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onSurface),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 2,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        if (locations[index].day >
+                                                                            1) {
+                                                                          setState(
+                                                                              () {
+                                                                            locations[index] =
+                                                                                PlaceModel(
+                                                                              placeId: locations[index].placeId,
+                                                                              placeName: locations[index].placeName,
+                                                                              day: locations[index].day - 1,
+                                                                              latitude: locations[index].latitude,
+                                                                              longitude: locations[index].longitude,
+                                                                            );
+                                                                          });
+                                                                        }
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(2),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.1),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(4),
+                                                                        ),
+                                                                        child: Icon(
+                                                                            Icons
+                                                                                .remove,
+                                                                            size:
+                                                                                18),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width:
+                                                                            8),
+                                                                    Text(
+                                                                      "${locations[index].day}",
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .bodyLarge
+                                                                          ?.copyWith(
+                                                                            color:
+                                                                                Theme.of(context).colorScheme.onSecondary,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width:
+                                                                            8),
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          locations[index] =
+                                                                              PlaceModel(
+                                                                            placeId:
+                                                                                locations[index].placeId,
+                                                                            placeName:
+                                                                                locations[index].placeName,
+                                                                            day:
+                                                                                locations[index].day + 1,
+                                                                            latitude:
+                                                                                locations[index].latitude,
+                                                                            longitude:
+                                                                                locations[index].longitude,
+                                                                          );
+                                                                        });
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(2),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .primary
+                                                                              .withOpacity(0.1),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(4),
+                                                                        ),
+                                                                        child: Icon(
+                                                                            Icons
+                                                                                .add,
+                                                                            size:
+                                                                                18),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(width: 8),
+                                                          ],
+                                                        ),
+                                                      index > 0 &&
+                                                              locations.length >
+                                                                  2
+                                                          ? GestureDetector(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  locations
+                                                                      .removeAt(
+                                                                          index);
+                                                                });
+                                                              },
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .delete_outline,
+                                                                  size: 24,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onSurface,
+                                                                ),
+                                                              ))
+                                                          : SizedBox(),
+                                                    ],
+                                                  )
+                                                ],
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 8),
-                                    ],
-                                  ),
-                                index>0 && locations.length>2? GestureDetector(
-                                  onTap: (){
-                                    setState(() {
-                                      locations.removeAt(index);
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.delete_outline,size: 24,color: Theme.of(context).colorScheme.onSurface,),
-                                  )
-                                ) : SizedBox(),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                                      ),)
-                                  ),
+                                        ),
+                                      )),
                                   SizedBox(
                                     width: double.infinity,
                                     child: TextButton(
                                         onPressed: () async {
-                                          PlaceModel? result = await Navigator.pushNamed(context, '/searchPage') as PlaceModel?;
-                                          if(result!=null){
+                                          PlaceModel? result =
+                                              await Navigator.pushNamed(
+                                                      context, '/searchPage')
+                                                  as PlaceModel?;
+                                          if (result != null) {
                                             setState(() {
                                               // Set default day to 1 for new locations
                                               locations.add(result);
@@ -308,47 +439,91 @@ class _EditTripCardState extends State<EditTripCard> {
                                           }
                                         },
                                         style: ButtonStyle(
-                                            backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.primary),
-                                            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-                                        ),
-                                        child: Text('ADD LOCATION',
-                                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),)
-                                    ),
+                                            backgroundColor:
+                                                WidgetStatePropertyAll(
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .primary),
+                                            shape: WidgetStatePropertyAll(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)))),
+                                        child: Text(
+                                          'ADD LOCATION',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(color: Colors.white),
+                                        )),
                                   ),
                                   Row(
                                     spacing: 15,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () => _selectDate(context),
                                           child: Container(
                                             decoration: BoxDecoration(
-                                                color: Theme.of(context).colorScheme.surface,
-                                                borderRadius: BorderRadius.circular(20),
-                                                border: Border.all(color: Colors.black12)
-                                            ),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                    color: Colors.black12)),
                                             //width: double.infinity,
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 8),
                                               child: Row(
                                                 spacing: 6,
                                                 children: [
-                                                  SizedBox(width: 0,),
-                                                  Icon(
-                                                    Icons.calendar_today_outlined,
-                                                    color:
-                                                    Theme.of(context).colorScheme.onSurface,
+                                                  SizedBox(
+                                                    width: 0,
                                                   ),
-                                                  SizedBox(width: 0,),
+                                                  Icon(
+                                                    Icons
+                                                        .calendar_today_outlined,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 0,
+                                                  ),
                                                   Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      Text('START AT',
-                                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                                                      Text(
+                                                        'START AT',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .onSurface),
                                                       ),
-                                                      Text(DateFormat.MMMd().format(selectedDate.toLocal()),
-                                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+                                                      Text(
+                                                        DateFormat.MMMd()
+                                                            .format(selectedDate
+                                                                .toLocal()),
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge
+                                                            ?.copyWith(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .onSecondary),
                                                       ),
                                                     ],
                                                   )
@@ -360,57 +535,93 @@ class _EditTripCardState extends State<EditTripCard> {
                                       ),
                                       Expanded(
                                         child: GestureDetector(
-                                          onTap: (){},
+                                          onTap: () {},
                                           child: Container(
                                             decoration: BoxDecoration(
-                                                color: Theme.of(context).colorScheme.surface,
-                                                borderRadius: BorderRadius.circular(20),
-                                                border: Border.all(color: Colors.black12)
-                                            ),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .surface,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                    color: Colors.black12)),
                                             //width: double.infinity,
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 8),
                                               child: Row(
                                                 spacing: 6,
                                                 children: [
-                                                  SizedBox(width: 0,),
+                                                  SizedBox(
+                                                    width: 0,
+                                                  ),
                                                   Icon(
                                                     Icons.people_alt_outlined,
-                                                    color:
-                                                    Theme.of(context).colorScheme.onSurface,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface,
                                                   ),
-                                                  SizedBox(width: 0,),
+                                                  SizedBox(
+                                                    width: 0,
+                                                  ),
                                                   Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      Text('GUESTS  ',
-                                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                                                      Text(
+                                                        'GUESTS  ',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .onSurface),
                                                       ),
                                                       Row(
                                                         children: [
                                                           GestureDetector(
-                                                              onTap: (){
-                                                                if(guestCount>1){
+                                                              onTap: () {
+                                                                if (guestCount >
+                                                                    1) {
                                                                   setState(() {
                                                                     guestCount--;
                                                                   });
                                                                 }
                                                               },
-                                                              child: Icon(Icons.remove)
+                                                              child: Icon(Icons
+                                                                  .remove)),
+                                                          SizedBox(
+                                                            width: 5,
                                                           ),
-                                                          SizedBox(width: 5,),
-                                                          Text(guestCount.toString(),
-                                                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+                                                          Text(
+                                                            guestCount
+                                                                .toString(),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyLarge
+                                                                ?.copyWith(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .onSecondary),
                                                           ),
-                                                          SizedBox(width: 5,),
+                                                          SizedBox(
+                                                            width: 5,
+                                                          ),
                                                           GestureDetector(
-                                                              onTap: (){
+                                                              onTap: () {
                                                                 setState(() {
                                                                   guestCount++;
                                                                 });
                                                               },
-                                                              child: Icon(Icons.add)
-                                                          ),
+                                                              child: Icon(
+                                                                  Icons.add)),
                                                         ],
                                                       ),
                                                     ],
@@ -423,27 +634,49 @@ class _EditTripCardState extends State<EditTripCard> {
                                       )
                                     ],
                                   ),
-                                  
                                   SizedBox(
                                     width: double.infinity,
                                     child: TextButton(
-                                        onPressed: provider.editIsLoading ? null : () async {
-                                          provider.editTrip({
-                                            "startLocation": locations[0].toJson(),
-                                            "locations": locations.map((e) => e.toJson()).toList(),
-                                            "startDate": selectedDate.toIso8601String(),
-                                            "guests": guestCount,
-                                          });
-                                        },
+                                        onPressed: provider.editIsLoading
+                                            ? null
+                                            : () async {
+                                                provider.editTrip({
+                                                  "startLocation":
+                                                      locations[0].toJson(),
+                                                  "locations": locations
+                                                      .map((e) => e.toJson())
+                                                      .toList(),
+                                                  "startDate": selectedDate
+                                                      .toIso8601String(),
+                                                  "guests": guestCount,
+                                                });
+                                              },
                                         style: ButtonStyle(
-                                            backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.secondary),
-                                            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-                                        ),
+                                            backgroundColor:
+                                                WidgetStatePropertyAll(
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary),
+                                            shape: WidgetStatePropertyAll(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)))),
                                         child: provider.editIsLoading
-                                            ? SizedBox(height: 30, width: 30, child: CircularProgressIndicator(color: Colors.white))
-                                            : Text('SAVE',
-                                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),)
-                                    ),
+                                            ? SizedBox(
+                                                height: 30,
+                                                width: 30,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                        color: Colors.white))
+                                            : Text(
+                                                'SAVE',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                        color: Colors.white),
+                                              )),
                                   ),
                                 ],
                               ),
@@ -461,10 +694,9 @@ class _EditTripCardState extends State<EditTripCard> {
                         color: Colors.white.withOpacity(0.3),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Center(
-                        child: CircularProgressIndicator()),
-                      ),
+                      child: Center(child: CircularProgressIndicator()),
                     ),
+                  ),
               ],
             ),
           );

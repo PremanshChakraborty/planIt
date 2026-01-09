@@ -180,6 +180,12 @@ class _NearbyAttractionsViewState extends State<_NearbyAttractionsView> {
                                         '',
                                     rating: attraction.rating ?? 0,
                                     type: attraction.types?.firstOrNull ?? '',
+                                    latitude:
+                                        attraction.geometry?.location?.lat ??
+                                            0.0,
+                                    longitude:
+                                        attraction.geometry?.location?.lng ??
+                                            0.0,
                                   ),
                                   context,
                                 ),

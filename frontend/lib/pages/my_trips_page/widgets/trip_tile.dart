@@ -66,8 +66,7 @@ class _TripTileState extends State<TripTile> {
   }
 
   void showOwnerInfo() {
-    if (widget.trip.user == null) return;
-    UserInfoDialog.show(context, user: widget.trip.user!, role: 'Trip Owner');
+    UserInfoDialog.show(context, user: widget.trip.user, role: 'Trip Owner');
   }
 
   @override
@@ -164,7 +163,7 @@ class _TripTileState extends State<TripTile> {
                                 editTrip();
                               },
                               icon: Icon(Icons.edit_outlined))
-                        else if (widget.trip.user != null)
+                        else
                           Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: GestureDetector(
@@ -173,16 +172,16 @@ class _TripTileState extends State<TripTile> {
                                 radius: 20,
                                 backgroundColor:
                                     Theme.of(context).colorScheme.primary,
-                                backgroundImage: widget.trip.user!.imageUrl !=
+                                backgroundImage: widget.trip.user.imageUrl !=
                                             null &&
-                                        widget.trip.user!.imageUrl!.isNotEmpty
-                                    ? NetworkImage(widget.trip.user!.imageUrl!)
+                                        widget.trip.user.imageUrl!.isNotEmpty
+                                    ? NetworkImage(widget.trip.user.imageUrl!)
                                     : null,
-                                child: widget.trip.user!.imageUrl == null ||
-                                        widget.trip.user!.imageUrl!.isEmpty
+                                child: widget.trip.user.imageUrl == null ||
+                                        widget.trip.user.imageUrl!.isEmpty
                                     ? Text(
-                                        widget.trip.user!.name.isNotEmpty
-                                            ? widget.trip.user!.name[0]
+                                        widget.trip.user.name.isNotEmpty
+                                            ? widget.trip.user.name[0]
                                                 .toUpperCase()
                                             : '?',
                                         style: TextStyle(

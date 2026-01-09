@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/models/place_model.dart';
 import 'package:travel_app/providers/auth_provider.dart';
-import 'package:travel_app/services/trip_services.dart';
 import 'package:travel_app/pages/bookings_page/widgets/hotel_card.dart';
 import 'package:travel_app/widgets/bottom_nav.dart';
 import 'package:travel_app/secrets.dart'; // Add your TripAdvisor API key here
@@ -99,42 +97,16 @@ class _BookingPageState extends State<BookingPage> {
 
   Future<void> _toggleSaveHotel(Hotel hotel) async {
     if (!_canSaveToTrip) return;
-    final auth = Provider.of<Auth>(context, listen: false);
-    final service = TripService(auth: auth);
+    // TODO: Implement hotel saving with actual coordinates from API
+    // Currently disabled as HotelModel requires latitude/longitude
 
-    final priceString = '₹${hotel.price.toStringAsFixed(0)}';
-
-    final model = HotelModel(
-      placeId: hotel.contentId,
-      name: hotel.name,
-      image: hotel.imageUrl,
-      price: priceString,
-      rating: hotel.rating,
-    );
-
-    try {
-      final msg = await service.addRemoveHotelToTrip(
-        widget.tripId!,
-        model,
-        widget.locationIndex!,
-      );
-      setState(() {
-        if (_savedHotelIds.contains(hotel.contentId)) {
-          _savedHotelIds.remove(hotel.contentId);
-        } else {
-          _savedHotelIds.add(hotel.contentId);
-        }
-      });
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(msg), backgroundColor: Colors.green),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
-      );
-    }
+    setState(() {
+      if (_savedHotelIds.contains(hotel.contentId)) {
+        _savedHotelIds.remove(hotel.contentId);
+      } else {
+        _savedHotelIds.add(hotel.contentId);
+      }
+    });
   }
 
   Future<void> fetchHotelsWithGeoId(

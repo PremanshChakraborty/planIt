@@ -19,7 +19,20 @@ class TripForm extends StatefulWidget {
 
 class _TripFormState extends State<TripForm> {
   bool pendingRequest = false;
-  List<PlaceModel> locations = [ PlaceModel(placeId: '1', placeName: 'Gangtok', day: 1), PlaceModel(placeId: '2', placeName: 'Shimla', day: 1)];
+  List<PlaceModel> locations = [
+    PlaceModel(
+        placeId: '1',
+        placeName: 'Gangtok',
+        day: 1,
+        latitude: 0.0,
+        longitude: 0.0),
+    PlaceModel(
+        placeId: '2',
+        placeName: 'Shimla',
+        day: 1,
+        latitude: 0.0,
+        longitude: 0.0)
+  ];
   int guestCount = 1;
   DateTime selectedDate = DateTime.now();
   late final TripService tripService;
@@ -27,7 +40,7 @@ class _TripFormState extends State<TripForm> {
   @override
   void initState() {
     super.initState();
-    tripService = TripService(auth: Provider.of<Auth>(context,listen: false));
+    tripService = TripService(auth: Provider.of<Auth>(context, listen: false));
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -43,7 +56,6 @@ class _TripFormState extends State<TripForm> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,155 +70,243 @@ class _TripFormState extends State<TripForm> {
         ],
       ),
       child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 20),
-          child:Column(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Column(
             spacing: 15,
             children: [
               Column(
                   spacing: 15,
-                  children: List.generate(locations.length, (index) => GestureDetector(
-                    onTap: () async {
-                      PlaceModel? result = await Navigator.pushNamed(context, '/searchPage') as PlaceModel?;
-                      if(result!=null){
-                        setState(() {
-                          locations[index] = result;
-                        });
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.black12)
-                      ),
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          spacing: 6,
-                          children: [
-                            SizedBox(width: 0,),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(index==0? "FROM" : "LOCATION $index",
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
-                                  ),
-                                  Text(locations[index].placeName,
-                                  overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                                  ),
-                                ],
+                  children: List.generate(
+                    locations.length,
+                    (index) => GestureDetector(
+                      onTap: () async {
+                        PlaceModel? result =
+                            await Navigator.pushNamed(context, '/searchPage')
+                                as PlaceModel?;
+                        if (result != null) {
+                          setState(() {
+                            locations[index] = result;
+                          });
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.black12)),
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            spacing: 6,
+                            children: [
+                              SizedBox(
+                                width: 0,
                               ),
-                            ),
-                            Row(
-                              children: [
-                                if (index > 0)
-                                  Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Text("DAYS",
-                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                                          ),
-                                          SizedBox(height: 2,),
-                                          Row(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  if (locations[index].day > 1) {
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      index == 0 ? "FROM" : "LOCATION $index",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary),
+                                    ),
+                                    Text(
+                                      locations[index].placeName,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  if (index > 0)
+                                    Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "DAYS",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface),
+                                            ),
+                                            SizedBox(
+                                              height: 2,
+                                            ),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    if (locations[index].day >
+                                                        1) {
+                                                      setState(() {
+                                                        locations[index] =
+                                                            PlaceModel(
+                                                          placeId:
+                                                              locations[index]
+                                                                  .placeId,
+                                                          placeName:
+                                                              locations[index]
+                                                                  .placeName,
+                                                          day: locations[index]
+                                                                  .day -
+                                                              1,
+                                                          latitude:
+                                                              locations[index]
+                                                                  .latitude,
+                                                          longitude:
+                                                              locations[index]
+                                                                  .longitude,
+                                                        );
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(2),
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary
+                                                          .withOpacity(0.1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    child: Icon(Icons.remove,
+                                                        size: 18),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  "${locations[index].day}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.copyWith(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSecondary,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                                SizedBox(width: 8),
+                                                GestureDetector(
+                                                  onTap: () {
                                                     setState(() {
-                                                      locations[index] = PlaceModel(
-                                                        placeId: locations[index].placeId,
-                                                        placeName: locations[index].placeName,
-                                                        day: locations[index].day - 1,
+                                                      locations[index] =
+                                                          PlaceModel(
+                                                        placeId:
+                                                            locations[index]
+                                                                .placeId,
+                                                        placeName:
+                                                            locations[index]
+                                                                .placeName,
+                                                        day: locations[index]
+                                                                .day +
+                                                            1,
+                                                        latitude:
+                                                            locations[index]
+                                                                .latitude,
+                                                        longitude:
+                                                            locations[index]
+                                                                .longitude,
                                                       );
                                                     });
-                                                  }
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.all(2),
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                                    borderRadius: BorderRadius.circular(4),
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(2),
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary
+                                                          .withOpacity(0.1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    child: Icon(Icons.add,
+                                                        size: 18),
                                                   ),
-                                                  child: Icon(Icons.remove, size: 18),
                                                 ),
-                                              ),
-                                              SizedBox(width: 8),
-                                              Text(
-                                                "${locations[index].day}",
-                                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                  color: Theme.of(context).colorScheme.onSecondary,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              SizedBox(width: 8),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    locations[index] = PlaceModel(
-                                                      placeId: locations[index].placeId,
-                                                      placeName: locations[index].placeName,
-                                                      day: locations[index].day + 1,
-                                                    );
-                                                  });
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.all(2),
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                                    borderRadius: BorderRadius.circular(4),
-                                                  ),
-                                                  child: Icon(Icons.add, size: 18),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 8),
-                                    ],
-                                  ),
-                                index>0 && locations.length>2? GestureDetector(
-                                  onTap: (){
-                                    setState(() {
-                                      locations.removeAt(index);
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.delete_outline,size: 24,color: Theme.of(context).colorScheme.onSurface,),
-                                  )
-                                ) : SizedBox(),
-                              ],
-                            )
-                          ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(width: 8),
+                                      ],
+                                    ),
+                                  index > 0 && locations.length > 2
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              locations.removeAt(index);
+                                            });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              Icons.delete_outline,
+                                              size: 24,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                            ),
+                                          ))
+                                      : SizedBox(),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),)
-              ),
+                  )),
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
                     onPressed: () async {
-                      PlaceModel? result = await Navigator.pushNamed(context, '/searchPage') as PlaceModel?;
-                      if(result!=null){
+                      PlaceModel? result =
+                          await Navigator.pushNamed(context, '/searchPage')
+                              as PlaceModel?;
+                      if (result != null) {
                         setState(() {
                           locations.add(result);
                         });
                       }
                     },
                     style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.primary),
-                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-                    ),
-                    child: Text('ADD LOCATION',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),)
-                ),
+                        backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                    child: Text(
+                      'ADD LOCATION',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: Colors.white),
+                    )),
               ),
               Row(
                 spacing: 15,
@@ -219,27 +319,41 @@ class _TripFormState extends State<TripForm> {
                         decoration: BoxDecoration(
                             color: Colors.grey.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.black12)
-                        ),
+                            border: Border.all(color: Colors.black12)),
                         //width: double.infinity,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 8),
                           child: Row(
                             spacing: 8,
                             children: [
                               Icon(
                                 Icons.calendar_today_outlined,
-                                color:
-                                Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('START AT',
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                                  Text(
+                                    'START AT',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface),
                                   ),
-                                  Text(DateFormat.MMMd().format(selectedDate.toLocal()),
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+                                  Text(
+                                    DateFormat.MMMd()
+                                        .format(selectedDate.toLocal()),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondary),
                                   ),
                                 ],
                               )
@@ -251,55 +365,70 @@ class _TripFormState extends State<TripForm> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: (){},
+                      onTap: () {},
                       child: Container(
                         decoration: BoxDecoration(
                             color: Colors.grey.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.black12)
-                        ),
+                            border: Border.all(color: Colors.black12)),
                         //width: double.infinity,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 8),
                           child: Row(
                             spacing: 8,
                             children: [
                               Icon(
                                 Icons.people_alt_outlined,
-                                color:
-                                Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('GUESTS  ',
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                                  Text(
+                                    'GUESTS  ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface),
                                   ),
                                   Row(
                                     children: [
                                       GestureDetector(
-                                          onTap: (){
-                                            if(guestCount>1){
+                                          onTap: () {
+                                            if (guestCount > 1) {
                                               setState(() {
                                                 guestCount--;
                                               });
                                             }
                                           },
-                                          child: Icon(Icons.remove)
+                                          child: Icon(Icons.remove)),
+                                      SizedBox(
+                                        width: 5,
                                       ),
-                                      SizedBox(width: 5,),
-                                      Text(guestCount.toString(),
-                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+                                      Text(
+                                        guestCount.toString(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSecondary),
                                       ),
-                                      SizedBox(width: 5,),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
                                       GestureDetector(
-                                          onTap: (){
+                                          onTap: () {
                                             setState(() {
                                               guestCount++;
                                             });
                                           },
-                                          child: Icon(Icons.add)
-                                      ),
+                                          child: Icon(Icons.add)),
                                     ],
                                   ),
                                 ],
@@ -319,37 +448,56 @@ class _TripFormState extends State<TripForm> {
                       setState(() {
                         pendingRequest = true;
                       });
-                      try{
+                      try {
                         var reqBody = {
-                          "startLocation":locations[0].toJson(),
-                          "locations":locations.map((e) => e.toJson()).toList(),
-                          "startDate":selectedDate.toIso8601String(),
-                          "guests":guestCount,
+                          "startLocation": locations[0].toJson(),
+                          "locations":
+                              locations.map((e) => e.toJson()).toList(),
+                          "startDate": selectedDate.toIso8601String(),
+                          "guests": guestCount,
                         };
                         await tripService.postTrip(reqBody);
-                        if(context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.green,content: Text("Trip Created Successfully!")));
+                        if (context.mounted)
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text("Trip Created Successfully!")));
                         setState(() {
                           pendingRequest = false;
                         });
-                        if(context.mounted) Navigator.pushNamed(context, '/myTripsPage');
-                      } catch(e){
+                        if (context.mounted)
+                          Navigator.pushNamed(context, '/myTripsPage');
+                      } catch (e) {
                         setState(() {
                           pendingRequest = false;
                         });
-                        if(context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.redAccent, content: Text('${e.toString()}. Try Again!')));
+                        if (context.mounted)
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text('${e.toString()}. Try Again!')));
                       }
                     },
                     style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.secondary),
-                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-                    ),
-                    child: pendingRequest? SizedBox(height: 30, width : 30,child: CircularProgressIndicator(color: Colors.white,)) : Text('CREATE TRIP',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),)
-                ),
+                        backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                    child: pendingRequest
+                        ? SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ))
+                        : Text(
+                            'CREATE TRIP',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: Colors.white),
+                          )),
               ),
             ],
-          )
-      ),
+          )),
     );
   }
 }
