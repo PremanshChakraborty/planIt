@@ -440,3 +440,35 @@
 [2026-01-05T11:55:57.797Z] INFO: User logged in successfully: preetimanojch@gmail.com
 [2026-01-05T11:58:36.025Z] INFO: User logged in successfully: preetimanojch@gmail.com
 [2026-01-05T12:09:47.587Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T11:36:35.102Z] INFO: Listening on port 3000...
+[2026-01-08T11:36:36.914Z] INFO: Connected to Database...
+[2026-01-08T11:36:37.377Z] INFO: ready for messages
+[2026-01-08T11:39:45.593Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T12:18:38.507Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T13:00:29.357Z] INFO: Listening on port 3000...
+[2026-01-08T13:00:30.702Z] INFO: Connected to Database...
+[2026-01-08T13:00:31.670Z] INFO: ready for messages
+[2026-01-08T13:02:48.831Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T13:22:46.690Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T14:51:29.013Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T16:32:31.620Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T16:40:50.930Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T16:41:56.612Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-08T17:35:48.179Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T06:52:55.145Z] WARN: Validation failed for email:  - "email" is not allowed to be empty
+[2026-01-09T06:53:02.409Z] WARN: Failed login attempt for email: preetimanojch@gmail.com
+[2026-01-09T06:53:08.509Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T07:07:55.238Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T07:10:39.752Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T12:28:07.559Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T12:33:20.100Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T12:37:09.013Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T12:42:18.324Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T12:51:04.587Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T12:57:37.161Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T13:00:04.076Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T13:38:10.656Z] WARN: Failed login attempt for email: preetimanojch@gmail.com
+[2026-01-09T13:38:17.228Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T13:46:45.923Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T13:52:18.591Z] INFO: User logged in successfully: preetimanojch@gmail.com
+[2026-01-09T13:56:37.507Z] INFO: User logged in successfully: preetimanojch@gmail.com
