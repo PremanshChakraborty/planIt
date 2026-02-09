@@ -5,8 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/config/constants.dart';
 import 'package:travel_app/models/place_model.dart';
 import 'package:travel_app/models/trip.dart';
+import 'package:travel_app/pages/day_planner/provider/curr_plan_provider.dart';
+import 'package:travel_app/pages/day_planner/screens/create_day_plan.dart';
+import 'package:travel_app/pages/day_planner/screens/day_plans_list_page.dart';
+import 'package:travel_app/pages/day_planner/services/day_plan_service.dart';
 import 'package:travel_app/pages/explore_page/explorePage.dart';
-import 'package:travel_app/pages/explore_page/hotels_page/hotels_page.dart';
 import 'package:travel_app/pages/live_trip_page/utils/map_markers.dart';
 import 'package:travel_app/pages/live_trip_page/widgets/location_card.dart';
 import 'package:travel_app/providers/auth_provider.dart';
@@ -32,7 +35,6 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   GoogleMapController? _mapController;
   String? _selectedLocationId;
   String? _expandedLocationId;
-  final ScrollController _scrollController = ScrollController();
   final Map<String, GlobalKey> _locationKeys = {};
   Set<Marker> _markers = {};
   String? _mapStyle;
@@ -366,7 +368,6 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   @override
   void dispose() {
     _mapController?.dispose();
-    _scrollController.dispose();
     _sheetController.dispose();
     super.dispose();
   }
@@ -540,6 +541,86 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                         controller: scrollController,
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                         children: [
+                          GestureDetector(
+                            onTap: _navigateToDayPlans,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surface,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: theme.colorScheme.primary
+                                        .withOpacity(0.2),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 0),
+                                  ),
+                                ],
+                                border: Border.all(
+                                    color: theme.colorScheme.primary
+                                        .withOpacity(0.5),
+                                    width: 1.5),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 16,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.date_range,
+                                    size: 30,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "Day Plans",
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: theme.colorScheme.secondary
+                                          .withOpacity(0.3),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 3,
+                                    ),
+                                    child: Text(
+                                      "New",
+                                      style:
+                                          theme.textTheme.bodySmall?.copyWith(
+                                        color: theme.colorScheme.secondary,
+                                      ),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  InkWell(
+                                    onTap: _navigateToDayPlans,
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: theme
+                                            .colorScheme.secondaryContainer,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      padding: const EdgeInsets.all(5),
+                                      child: Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 17,
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                ],
+                              ),
+                            ),
+                          ),
                           Center(
                             child: Text(
                               "Locations",
@@ -691,12 +772,13 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => NearbyHotelsPage(
-                  place: place,
-                  apiKey: Constants.googlePlacesApiKey,
-                  tripId: widget.trip.id,
-                  locationIndex: index,
-                  ownerId: widget.trip.user.id,
+                builder: (context) => ChangeNotifierProvider(
+                  create: (context) => CurrPlanProvider(
+                      tripId: widget.trip.id,
+                      location: place,
+                      dayPlanService: DayPlanService(
+                          auth: Provider.of<Auth>(context, listen: false))),
+                  child: CreateDayPlan(),
                 ),
               ),
             ).then((_) => _refreshTrip());
@@ -722,5 +804,15 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
         );
       },
     );
+  }
+
+  void _navigateToDayPlans() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => DayPlansListPage(
+                trip: widget.trip,
+              )),
+    ).then((_) => _refreshTrip());
   }
 }

@@ -6,8 +6,8 @@ const tripSchema = new mongoose.Schema(
       placeId: { type: String, required: true, minlength: 1, trim: true },
       placeName: { type: String, required: true, minlength: 3, trim: true },
       day: { type: Number, required: true, min: 1, max: 1 },
-      latitude: { type: Number, required: false },
-      longitude: { type: Number, required: false },
+      latitude: { type: Number, required: true },
+      longitude: { type: Number, required: true },
       attractions: {
         type: [
           {
@@ -17,8 +17,8 @@ const tripSchema = new mongoose.Schema(
             rating: { type: Number, required: true },
             image: { type: String, required: true, trim: true },
             addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-            latitude: { type: Number, required: false },
-            longitude: { type: Number, required: false },
+            latitude: { type: Number, required: true },
+            longitude: { type: Number, required: true },
           }
         ],
       },
@@ -29,8 +29,8 @@ const tripSchema = new mongoose.Schema(
           placeId: { type: String, required: true, minlength: 1, trim: true },
           placeName: { type: String, required: true, minlength: 3, trim: true },
           day: { type: Number, required: true, min: 1 },
-          latitude: { type: Number, required: false },
-          longitude: { type: Number, required: false },
+          latitude: { type: Number, required: true },
+          longitude: { type: Number, required: true },
           addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
           attractions: {
             type: [
@@ -41,8 +41,8 @@ const tripSchema = new mongoose.Schema(
                 rating: { type: Number, required: true },
                 image: { type: String, required: true, trim: true },
                 addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-                latitude: { type: Number, required: false },
-                longitude: { type: Number, required: false },
+                latitude: { type: Number, required: true },
+                longitude: { type: Number, required: true },
               }
             ],
             default: [],
@@ -57,8 +57,8 @@ const tripSchema = new mongoose.Schema(
                 rating: { type: Number, required: true },
                 image: { type: String, required: true, trim: true },
                 addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-                latitude: { type: Number, required: false },
-                longitude: { type: Number, required: false },
+                latitude: { type: Number, required: true },
+                longitude: { type: Number, required: true },
               }
             ],
             default: [],
@@ -78,14 +78,14 @@ const tripSchema = new mongoose.Schema(
                 loc.placeName.length >= 3 &&
                 typeof loc.day === 'number' &&
                 loc.day >= 1 &&
-                (loc.latitude === null || loc.latitude === undefined || typeof loc.latitude === 'number') &&
-                (loc.longitude === null || loc.longitude === undefined || typeof loc.longitude === 'number') &&
+                typeof loc.latitude === 'number' &&
+                typeof loc.longitude === 'number' &&
                 (loc.attractions === null || Array.isArray(loc.attractions)) &&
                 (loc.hotels === null || Array.isArray(loc.hotels))
             )
           );
         },
-        message: 'At least two locations are required, each with a valid placeId, placeName (min 3 chars), day (>=1), and optional latitude/longitude.',
+        message: 'At least two locations are required, each with a valid placeId, placeName (min 3 chars), day (>=1), latitude, and longitude.',
       },
       required: true,
     },

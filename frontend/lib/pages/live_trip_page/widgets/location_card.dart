@@ -89,13 +89,13 @@ class _LocationCardState extends State<LocationCard> {
               : null,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: theme.colorScheme.onSecondary.withOpacity(0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
             if (widget.isSelected)
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.2),
+                color: theme.colorScheme.primary.withOpacity(0.1),
                 blurRadius: 12,
                 offset: const Offset(0, 0),
               ),
@@ -182,62 +182,31 @@ class _LocationCardState extends State<LocationCard> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Tooltip(
-                              message: 'Find Hotels',
-                              child: InkWell(
-                                onTap: widget.onHotelsTap,
+                        const SizedBox(width: 8),
+                        Tooltip(
+                          message: 'Explore Page',
+                          child: GestureDetector(
+                            onTap: widget.onAttractionsTap,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.secondaryContainer,
                                 borderRadius: BorderRadius.circular(8),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: theme.colorScheme.secondaryContainer,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.3),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Icon(
-                                      Icons.hotel,
-                                      color: theme.colorScheme.onSurface,
-                                      size: 22,
-                                    ),
-                                  ),
+                                border: Border.all(
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.3),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Icon(
+                                  Icons.search,
+                                  color: theme.colorScheme.onSurface,
+                                  size: 22,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Tooltip(
-                              message: 'Nearby Attractions',
-                              child: GestureDetector(
-                                onTap: widget.onAttractionsTap,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: theme.colorScheme.secondaryContainer,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.3),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Icon(
-                                      Icons.attractions,
-                                      color: theme.colorScheme.onSurface,
-                                      size: 22,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                         SizedBox(height: 6),
                         InkWell(
@@ -257,7 +226,7 @@ class _LocationCardState extends State<LocationCard> {
                                 size: 18,
                               ),
                               Text(
-                                'Bookmarks',
+                                'Saved',
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.primary,
                                 ),

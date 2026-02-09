@@ -57,10 +57,12 @@ class PlaceModel {
 class AddedBy {
   final String userId;
   final String userName;
+  final String? imageUrl;
 
   AddedBy({
     required this.userId,
     required this.userName,
+    this.imageUrl,
   });
 
   factory AddedBy.fromJson(Map<String, dynamic> json) {
@@ -68,6 +70,7 @@ class AddedBy {
     return AddedBy(
       userId: (json['_id'] ?? json['userId'])?.toString() ?? '',
       userName: (json['name'] ?? json['userName']) as String? ?? 'Unknown',
+      imageUrl: (json['imageUrl'] ?? json['image']) as String?,
     );
   }
 
@@ -75,6 +78,7 @@ class AddedBy {
     return {
       'userId': userId,
       'userName': userName,
+      'imageUrl': imageUrl,
     };
   }
 }

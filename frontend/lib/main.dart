@@ -4,6 +4,7 @@ import 'package:travel_app/pages/filter_page/filter_page.dart';
 import 'package:travel_app/pages/pages.dart';
 import 'package:travel_app/pages/profile_page/profile_page.dart';
 import 'package:travel_app/providers/auth_provider.dart';
+import 'package:travel_app/providers/google_services_provider.dart';
 import 'config/theme.dart';
 
 class ThemeProvider extends ChangeNotifier {
@@ -22,6 +23,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => GoogleServicesProvider()),
       ],
       child: MyApp(),
     ),
@@ -39,23 +41,23 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeProvider.themeMode,
-      initialRoute: '/splash',  // Set the splash screen as initial route
+      initialRoute: '/splash', // Set the splash screen as initial route
       routes: {
-        '/splash': (context) => SplashScreen(),  // Add splash screen route
+        '/splash': (context) => SplashScreen(), // Add splash screen route
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
         '/forgotPassword': (context) => ForgotPasswordPage(),
         '/otpVerification': (context) => OtpverificationPage(),
         '/homepage': (context) => Homepage(),
-        '/resetPasswordPage' : (context) => paasswordResetPage(),
-        '/bookingPage' : (context) => BookingPage(),
-        '/filterpage':(context)=> FilterPage(),
-        '/profilepage':(context)=> ProfilePage(),
-        '/searchPage' : (context) => SearchPage(),
-        '/emergencyPage' : (context) => EmergencyContactPage(),
-        '/mapsPage' : (context) => MapsPage(),
-        '/myTripsPage' : (context) => MyTripsPage(),
+        '/resetPasswordPage': (context) => paasswordResetPage(),
+        '/bookingPage': (context) => BookingPage(),
+        '/filterpage': (context) => FilterPage(),
+        '/profilepage': (context) => ProfilePage(),
+        '/searchPage': (context) => SearchPage(),
+        '/emergencyPage': (context) => EmergencyContactPage(),
+        '/mapsPage': (context) => MapsPage(),
+        '/myTripsPage': (context) => MyTripsPage(),
       },
       debugShowCheckedModeBanner: false, // Disable debug banner
     );

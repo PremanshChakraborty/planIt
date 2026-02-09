@@ -363,7 +363,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNav(currentindex: 4),
+      bottomNavigationBar: BottomNav(currentindex: 3),
     );
   }
 

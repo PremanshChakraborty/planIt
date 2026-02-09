@@ -9,6 +9,7 @@ const editProfile = require('../routes/user/edit_profile');
 const tripRoutes = require('../routes/trip/triproute');
 const collabRoutes = require('../routes/collaborations/collabRoutes');
 const getUser = require('../routes/user/get_user');
+const dayPlanRoutes = require('../routes/dayplan/dayPlanRoute');
 
 
 module.exports = function (app) {
@@ -21,4 +22,5 @@ module.exports = function (app) {
     app.use('/api/trips', auth, tripRoutes);
     app.use('/api/collaborations', auth, collabRoutes);
     app.use('/api/users', auth, getUser);
+    app.use('/api/dayplans', auth, dayPlanRoutes);
 }

@@ -13,6 +13,8 @@ function validateTrip(trip) {
     type: Joi.string().required(),
     rating: Joi.number().required(),
     image: Joi.string().required(),
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
   });
 
   const hotelSchema = Joi.object({
@@ -21,6 +23,8 @@ function validateTrip(trip) {
     price: Joi.string().required(),
     rating: Joi.number().required(),
     image: Joi.string().required(),
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
   });
 
   const schema = Joi.object({
@@ -28,8 +32,8 @@ function validateTrip(trip) {
       placeId: Joi.string().min(1).required(),
       placeName: Joi.string().min(3).required(),
       day: Joi.number().valid(1).required(),
-      latitude: Joi.number().allow(null),
-      longitude: Joi.number().allow(null),
+      latitude: Joi.number().required(),
+      longitude: Joi.number().required(),
       attractions: Joi.array().items(attractionSchema).allow(null),
     }).required(),
     locations: Joi.array()
@@ -38,8 +42,8 @@ function validateTrip(trip) {
           placeId: Joi.string().min(1).required(),
           placeName: Joi.string().min(3).required(),
           day: Joi.number().min(1).required(),
-          latitude: Joi.number().allow(null),
-          longitude: Joi.number().allow(null),
+          latitude: Joi.number().required(),
+          longitude: Joi.number().required(),
           attractions: Joi.array().items(attractionSchema).allow(null).default([]),
           hotels: Joi.array().items(hotelSchema).allow(null).default([]),
         })
@@ -61,6 +65,8 @@ function validateLocation(location) {
     type: Joi.string().required(),
     rating: Joi.number().required(),
     image: Joi.string().required(),
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
   });
 
   const hotelSchema = Joi.object({
@@ -69,14 +75,16 @@ function validateLocation(location) {
     price: Joi.string().required(),
     rating: Joi.number().required(),
     image: Joi.string().required(),
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
   });
 
   const schema = Joi.object({
     placeId: Joi.string().min(1).required(),
     placeName: Joi.string().min(3).required(),
     day: Joi.number().min(1).required(),
-    latitude: Joi.number().allow(null),
-    longitude: Joi.number().allow(null),
+    latitude: Joi.number().required(),
+    longitude: Joi.number().required(),
     attractions: Joi.array().items(attractionSchema).default([]).allow(null),
     hotels: Joi.array().items(hotelSchema).default([]).allow(null),
   });

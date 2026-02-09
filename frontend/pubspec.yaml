@@ -34,8 +34,6 @@ dependencies:
   shared_preferences: ^2.2.2  # For storing contacts locally
   geolocator: ^13.0.3        # For fetching the user's location
   url_launcher: ^6.1.14      # For making calls
-  telephony: ^0.2.0
-  flutter_phone_direct_caller: ^2.0.2
   google_maps_flutter: ^2.2.0
   google_place: ^0.4.0
   carousel_slider: ^5.1.1
@@ -52,6 +50,10 @@ dependencies:
   google_places_flutter: ^2.1.0
   flutter_launcher_icons: ^0.14.4
   image_picker: ^1.2.1
+  dotted_border: ^3.1.0
+  shimmer: ^3.0.0
+  flutter_polyline_points: ^1.0.0
+  share_plus: ^10.0.0
 
 
 dev_dependencies:
