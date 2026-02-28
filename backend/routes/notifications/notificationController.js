@@ -11,7 +11,7 @@ exports.getNotifications = async (req, res) => {
             .sort({ createdAt: -1 })
             .skip((page - 1) * limit)
             .limit(limit)
-            .populate("tripId", "destination type name")
+            .populate("tripId", "startLocation")
             .populate("actorId", "name imageUrl");
 
         const unreadCount = await Notification.countDocuments({
