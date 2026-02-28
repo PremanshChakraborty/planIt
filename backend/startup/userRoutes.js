@@ -10,7 +10,7 @@ const tripRoutes = require('../routes/trip/triproute');
 const collabRoutes = require('../routes/collaborations/collabRoutes');
 const getUser = require('../routes/user/get_user');
 const dayPlanRoutes = require('../routes/dayplan/dayPlanRoute');
-const notificationRoutes = require('../routes/notification/notificationRoutes')
+const notificationRoutes = require('../routes/notifications/notificationRoutes')
 
 
 module.exports = function (app) {

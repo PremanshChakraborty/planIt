@@ -12,7 +12,7 @@ const { publishEvent } = require("../../utils/eventPublisher");
 router.get('/search-users', auth, async (req, res) => {
   try {
     const { query } = req.query;
-    
+
     // Validate search query
     if (!query || query.trim().length < 1) {
       return res.status(400).json({
@@ -27,8 +27,8 @@ router.get('/search-users', auth, async (req, res) => {
       name: { $regex: query.trim(), $options: 'i' },
       _id: { $ne: req.user._id } // Exclude current user
     })
-    .select('_id name email imageUrl') // Only return necessary fields for security
-    .limit(20); // Limit results to prevent abuse
+      .select('_id name email imageUrl') // Only return necessary fields for security
+      .limit(20); // Limit results to prevent abuse
 
     res.status(200).json({
       success: true,
@@ -67,10 +67,10 @@ router.post('/trips/:tripId/collaborators/add', auth, collaboratorMiddleware('pa
     }
 
     // Validate that all user IDs are valid ObjectIds
-    const validObjectIds = userIds.every(id => 
+    const validObjectIds = userIds.every(id =>
       mongoose.Types.ObjectId.isValid(id)
     );
-    
+
     if (!validObjectIds) {
       return res.status(400).json({
         success: false,
@@ -93,7 +93,7 @@ router.post('/trips/:tripId/collaborators/add', auth, collaboratorMiddleware('pa
         return false;
       }
       // Exclude if user is already a collaborator
-      return !existingCollaboratorIds.some(existingId => 
+      return !existingCollaboratorIds.some(existingId =>
         existingId.toString() === userId.toString()
       );
     });
@@ -112,7 +112,7 @@ router.post('/trips/:tripId/collaborators/add', auth, collaboratorMiddleware('pa
     }).select('_id');
 
     const existingUserIds = existingUsers.map(user => user._id.toString());
-    const validNewUserIds = newUserIds.filter(userId => 
+    const validNewUserIds = newUserIds.filter(userId =>
       existingUserIds.includes(userId.toString())
     );
 
@@ -133,7 +133,7 @@ router.post('/trips/:tripId/collaborators/add', auth, collaboratorMiddleware('pa
       count: validNewUserIds.length
     });
 
-    try{
+    try {
       await publishEvent({
         eventType: "COLLABORATOR_ADDED",
         tripId: trip._id.toString(),
@@ -146,7 +146,7 @@ router.post('/trips/:tripId/collaborators/add', auth, collaboratorMiddleware('pa
         timestamp: new Date().toISOString()
 
       });
-    } catch(e) {
+    } catch (e) {
       console.error("Failed to publish SNS event", err);
     }
 
@@ -182,10 +182,10 @@ router.put('/trips/:tripId/collaborators', auth, ownerMiddleware('params'), asyn
     }
 
     // Validate that all collaborator IDs are valid ObjectIds
-    const validObjectIds = collaboratorIds.every(id => 
+    const validObjectIds = collaboratorIds.every(id =>
       mongoose.Types.ObjectId.isValid(id)
     );
-    
+
     if (!validObjectIds) {
       return res.status(400).json({
         success: false,
