@@ -1,7 +1,7 @@
 const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
 
 const snsClient = new SNSClient({
-    region: ap - south - 1
+    region: "ap-south-1"
 });
 
 const publishEvent = async (payload) => {
