@@ -6,6 +6,7 @@ const collaboratorMiddleware = require('../../middleware/collaborator');
 const { User } = require('../../models/user');
 const Trip = require('../../models/trip');
 const mongoose = require('mongoose');
+const { publishEvent } = require("../../utils/eventPublisher");
 
 // GET route: Search users by username/name for adding as collaborators
 router.get('/search-users', auth, async (req, res) => {
@@ -131,6 +132,23 @@ router.post('/trips/:tripId/collaborators/add', auth, collaboratorMiddleware('pa
       message: `Successfully added ${validNewUserIds.length} new collaborator(s)`,
       count: validNewUserIds.length
     });
+
+    try{
+      await publishEvent({
+        eventType: "COLLABORATOR_ADDED",
+        tripId: trip._id.toString(),
+        actorId: req.user.id,
+        newCollaboratorIds: newUserIds,
+        allCollaboratorIds: [
+          trip.user.toString(),
+          ...trip.collaborators.map(id => id.toString()),
+        ],
+        timestamp: new Date().toISOString()
+
+      });
+    } catch(e) {
+      console.error("Failed to publish SNS event", err);
+    }
 
   } catch (error) {
     console.error('Error adding collaborators:', error);
