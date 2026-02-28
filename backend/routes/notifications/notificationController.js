@@ -10,7 +10,9 @@ exports.getNotifications = async (req, res) => {
         const notifications = await Notification.find({ userId })
             .sort({ createdAt: -1 })
             .skip((page - 1) * limit)
-            .limit(limit);
+            .limit(limit)
+            .populate("tripId", "destination type name")
+            .populate("actorId", "name imageUrl");
 
         const unreadCount = await Notification.countDocuments({
             userId,
