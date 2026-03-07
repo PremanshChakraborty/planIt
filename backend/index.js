@@ -1,4 +1,5 @@
 require('dotenv').config();
+const helmet = require('helmet');
 
 const winston = require('winston');
 const express = require('express');
@@ -7,6 +8,19 @@ const config = require('config');
 const error = require('./middleware/error');
 
 const app = express();
+app.set('trust proxy', 1);
+
+app.use(helmet());
+
+const rateLimit = require('express-rate-limit');
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: { status: 429, error: 'Too many requests' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+app.use(globalLimiter);
 
 
 require('./startup/logger')();
