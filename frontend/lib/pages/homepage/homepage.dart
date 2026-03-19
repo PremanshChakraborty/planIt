@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import '../../widgets/bottom_nav.dart';
 import 'widgets/trip_form.dart';
 import 'widgets/popular_carousel.dart';
+import '../notifications/notifications_page.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -12,33 +12,42 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(
-          height: 30,
+            height: 30,
             child: Padding(
               padding: const EdgeInsets.only(left: 8),
-              child: Image.asset('assets/images/planit-high-resolution-logo-transparent.png'),
-            )
-        ),
-        actions: [Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: IconButton(
-            icon: Icon(Icons.notifications_none_rounded,
-              size: 30,
-              color: Theme.of(context).colorScheme.primary,
+              child: Image.asset(
+                  'assets/images/planit-high-resolution-logo-transparent.png'),
+            )),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: IconButton(
+              icon: Icon(
+                Icons.notifications_none_rounded,
+                size: 30,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NotificationsPage(),
+                  ),
+                );
+              },
             ),
-            onPressed: () {},
-          ),
-        )],
+          )
+        ],
         toolbarHeight: 70,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Column(
             spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +60,9 @@ class _HomepageState extends State<Homepage> {
                     ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
               ),
               TripForm(),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Text(
                 'Popular Destinations',
                 style: Theme.of(context)
@@ -65,7 +76,9 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNav(currentindex: 0,),
+      bottomNavigationBar: BottomNav(
+        currentindex: 0,
+      ),
     );
   }
 }
