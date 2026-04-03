@@ -179,33 +179,33 @@ The second sprint concluded with a production cloud deployment:
 ### 🧭 Day Planner
 
 <table><tr>
-<td><img src="screenshots/dayplan.jpg" width="220"/></td>
-<td><img src="screenshots/create_dayplan.jpg" width="220"/></td>
-<td><img src="screenshots/dayplan_map.jpg" width="220"/></td>
+<td><img src="screenshots/dayplan.jpeg" width="220"/></td>
+<td><img src="screenshots/create_dayplan.jpeg" width="220"/></td>
+<td><img src="screenshots/dayplan_map.jpeg" width="220"/></td>
 </tr></table>
 
 ### 🏨 Trip Planning Flow
 
 <table><tr>
-<td><img src="screenshots/home.jpg" width="220"/></td>
-<td><img src="screenshots/my trips.jpg" width="220"/></td>
-<td><img src="screenshots/trip_details.jpg" width="220"/></td>
-<td><img src="screenshots/trip_details_map.jpg" width="220"/></td>
+<td><img src="screenshots/home.jpeg" width="220"/></td>
+<td><img src="screenshots/my trips.jpeg" width="220"/></td>
+<td><img src="screenshots/trip_details.jpeg" width="220"/></td>
+<td><img src="screenshots/trip_details_map.jpeg" width="220"/></td>
 </tr></table>
 
 ### 🗺️ Collaboration
 
 <table><tr>
-<td><img src="screenshots/collaborators.jpg" width="220"/></td>
-<td><img src="screenshots/collaborators_add.jpg" width="220"/></td>
+<td><img src="screenshots/collaborators.jpeg" width="220"/></td>
+<td><img src="screenshots/collaborators_add.jpeg" width="220"/></td>
 </tr></table>
 
 ### 🤝 Attractions, Maps & Profile
 
 <table><tr>
-<td><img src="screenshots/attractions.jpg" width="220"/></td>
-<td><img src="screenshots/map.jpg" width="220"/></td>
-<td><img src="screenshots/profile.jpg" width="220"/></td>
+<td><img src="screenshots/attractions.jpeg" width="220"/></td>
+<td><img src="screenshots/map.jpeg" width="220"/></td>
+<td><img src="screenshots/profile.jpeg" width="220"/></td>
 </tr></table>
 
 ---
